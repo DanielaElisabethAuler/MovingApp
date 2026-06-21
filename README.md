@@ -1,4 +1,4 @@
-# Bewegungs-Coach — Phase 1 (MVP)
+# Felicurv — Phase 1 (MVP)
 
 > Der Boden wird winzig und unkaputtbar, die Decke bleibt offen.
 > Ziel ist **Konsistenz**, nicht Stundenzahl.

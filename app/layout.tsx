@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Bewegungs-Coach",
+  title: "Felicurv",
   description: "Der Boden wird winzig und unkaputtbar, die Decke bleibt offen.",
   manifest: "/manifest.json",
   icons: {
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true, // iOS: als Standalone-App starten
     statusBarStyle: "black-translucent",
-    title: "Coach",
+    title: "Felicurv",
   },
 };
 

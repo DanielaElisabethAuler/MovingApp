@@ -42,7 +42,7 @@ export default async function Home() {
       <header className="row" style={{ justifyContent: "space-between", alignItems: "center" }}>
         <span className="brand">
           <Logo size={36} />
-          <strong>Bewegungs-Coach</strong>
+          <strong>Felicurv</strong>
         </span>
         <span className="row" style={{ gap: 14 }}>
           <Link href="/history">Verlauf</Link>

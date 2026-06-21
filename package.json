@@ -2,7 +2,7 @@
   "name": "spuirrel",
   "version": "0.1.0",
   "private": true,
-  "description": "Adaptiver Bewegungs-Coach — Phase 1 MVP",
+  "description": "Felicurv — Adaptiver Bewegungs-Coach, Phase 1 MVP",
   "scripts": {
     "dev": "next dev",
     "dev:lan": "next dev -H 0.0.0.0",

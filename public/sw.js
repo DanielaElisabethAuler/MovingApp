@@ -17,11 +17,11 @@ self.addEventListener("push", (event) => {
     try {
       return event.data.json();
     } catch {
-      return { title: "Bewegungs-Coach", body: event.data.text() };
+      return { title: "Felicurv", body: event.data.text() };
     }
   })();
   event.waitUntil(
-    self.registration.showNotification(data.title ?? "Bewegungs-Coach", {
+    self.registration.showNotification(data.title ?? "Felicurv", {
       body: data.body ?? "",
       data: data,
     }),
