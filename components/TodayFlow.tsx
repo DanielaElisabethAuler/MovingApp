@@ -111,6 +111,8 @@ export function TodayFlow({
 
     return (
       <div className="card">
+        <div className="gradient-strip" />
+        <span className="eyebrow">Dein Plan</span>
         <div style={{ marginBottom: 8 }}>
           {plan.is_floor_only ? (
             <span className="pill floor">Boden gesichert</span>
@@ -157,6 +159,7 @@ export function TodayFlow({
   if (!situation) {
     return (
       <div className="card">
+        <span className="eyebrow">Dein Tag</span>
         <h1>Wie ist dein Tag gerade?</h1>
         <p className="muted">Das passt den Plan an dich an — nicht umgekehrt.</p>
         <div className="row" style={{ marginTop: 12 }}>
@@ -184,6 +187,7 @@ export function TodayFlow({
       >
         ← {SITUATION_CONFIG[situation].label}
       </button>
+      <span className="eyebrow">Der Boden</span>
       <h1>Was ist das Kleinste, das du jetzt machst?</h1>
       <p className="muted">
         Der Boden. Er muss winzig genug sein, dass du ihn sicher schaffst.

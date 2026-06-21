@@ -1,15 +1,28 @@
 :root {
-  --bg: #0e1116;
-  --card: #171b22;
-  --card-2: #1f2530;
-  --border: #2a313c;
-  --text: #e7ecf2;
-  --muted: #97a3b3;
-  --accent: #5b8cff;
-  --good: #43d18b;
-  --warn: #ffce5c;
-  --bad: #ff6b6b;
-  --radius: 16px;
+  /* Palette (aus deinem Design) */
+  --bg: #f0efeb;
+  --card: #ffffff;
+  --text: #202020;
+  --muted: #6e6b66;
+  --line: #e7e4dd;
+
+  --blue: #4a7ff8;
+  --orange: #ff7648;
+  --yellow: #ffc757;
+
+  --accent: #4a7ff8;
+  --good: #4a7ff8;
+  --warn: #ffc757;
+  --bad: #ff7648;
+
+  /* Markengradient (warm -> blau) */
+  --grad: linear-gradient(110deg, #4a7ff8 0%, #ff7648 55%, #ffc757 100%);
+  --grad-warm: linear-gradient(120deg, #ff7648 0%, #ffc757 100%);
+
+  --radius: 28px;
+  --radius-sm: 16px;
+  --shadow: 0 10px 30px rgba(32, 32, 32, 0.08);
+  --shadow-sm: 0 4px 14px rgba(32, 32, 32, 0.06);
 }
 
 * {
@@ -22,31 +35,51 @@ body {
   padding: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-poppins), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 .wrap {
-  max-width: 560px;
+  max-width: 520px;
   margin: 0 auto;
-  padding: 24px 18px 64px;
+  padding: 22px 18px 64px;
+}
+
+header {
+  margin-bottom: 6px;
 }
 
 h1 {
-  font-size: 1.5rem;
-  margin: 0 0 4px;
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+}
+
+.eyebrow {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--orange);
+  margin-bottom: 8px;
 }
 
 .muted {
   color: var(--muted);
 }
 
+/* ---- Karten ---- */
 .card {
+  position: relative;
   background: var(--card);
-  border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 20px;
+  padding: 24px;
   margin: 14px 0;
+  box-shadow: var(--shadow);
 }
 
 .row {
@@ -55,21 +88,25 @@ h1 {
   flex-wrap: wrap;
 }
 
+/* ---- Buttons (weisse Pille als Default, blau als Primary) ---- */
 button,
 .btn {
   font: inherit;
+  font-weight: 500;
   cursor: pointer;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: var(--card-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--card);
   color: var(--text);
-  padding: 12px 16px;
-  transition: transform 0.08s ease, border-color 0.15s ease, background 0.15s ease;
+  padding: 14px 18px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.08s ease, box-shadow 0.15s ease, border-color 0.15s ease,
+    background 0.15s ease;
 }
 
 button:hover,
 .btn:hover {
-  border-color: var(--accent);
+  box-shadow: 0 8px 20px rgba(32, 32, 32, 0.1);
 }
 
 button:active,
@@ -77,34 +114,50 @@ button:active,
   transform: scale(0.97);
 }
 
+button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
 button.primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #06101f;
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
   font-weight: 600;
+  box-shadow: 0 8px 22px rgba(74, 127, 248, 0.35);
+}
+
+button.primary:hover {
+  box-shadow: 0 10px 26px rgba(74, 127, 248, 0.45);
 }
 
 button.selected {
-  border-color: var(--accent);
-  background: #20304f;
+  border-color: var(--blue);
+  background: #eaf1fe;
+  color: #1b4fd0;
 }
 
 button.full {
   width: 100%;
 }
 
+/* Auswahl-Pille (Situation, Gruende): weisse Karte, links ausgerichtet */
 .choice {
   text-align: left;
   flex: 1 1 46%;
+  border-radius: 18px;
+  padding: 16px;
 }
 
 .choice .sub {
   display: block;
   font-size: 0.8rem;
   color: var(--muted);
-  margin-top: 3px;
+  margin-top: 4px;
+  font-weight: 400;
 }
 
+/* ---- Inputs ---- */
 input[type="text"],
 input[type="number"],
 input[type="email"],
@@ -113,59 +166,69 @@ input[type="url"],
 select {
   width: 100%;
   font: inherit;
-  background: var(--card-2);
+  background: #faf9f6;
   color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--blue);
+  background: #fff;
 }
 
 label {
   display: block;
   margin: 14px 0 6px;
   font-size: 0.9rem;
+  font-weight: 500;
   color: var(--muted);
 }
 
+/* ---- Tags / Pills ---- */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: var(--card-2);
-  border: 1px solid var(--border);
+  background: var(--grad-warm);
+  color: #202020;
   border-radius: 999px;
-  padding: 8px 14px;
-  font-weight: 600;
+  padding: 10px 18px;
+  font-weight: 700;
 }
 
 .flame {
   font-size: 1.2rem;
 }
 
-.plan-dose {
-  font-size: 2.4rem;
-  font-weight: 700;
-  letter-spacing: -1px;
-}
-
 .pill {
   display: inline-block;
-  font-size: 0.78rem;
-  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 12px;
   border-radius: 999px;
-  border: 1px solid var(--border);
+  background: #f0efeb;
   color: var(--muted);
   margin-right: 6px;
 }
 
 .pill.floor {
-  color: var(--good);
-  border-color: var(--good);
+  color: #1b6b4a;
+  background: #e3f6ec;
 }
 
 .pill.ceiling {
-  color: var(--accent);
-  border-color: var(--accent);
+  color: #1b4fd0;
+  background: #eaf1fe;
+}
+
+.plan-dose {
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: -1.5px;
 }
 
 .error {
@@ -174,7 +237,7 @@ label {
   margin-top: 8px;
 }
 
-/* ---- Post-Workout-Slider (Spec 3.2: clean ziehbar, intern numerisch) ---- */
+/* ---- Post-Workout-Slider ---- */
 .feeling {
   text-align: center;
 }
@@ -199,12 +262,7 @@ input[type="range"].slider {
   border-radius: 999px;
   outline: none;
   margin: 18px 0;
-  background: linear-gradient(
-    90deg,
-    var(--bad) 0%,
-    var(--warn) 50%,
-    var(--good) 100%
-  );
+  background: linear-gradient(90deg, var(--bad) 0%, var(--warn) 50%, var(--good) 100%);
 }
 
 input[type="range"].slider::-webkit-slider-thumb {
@@ -214,8 +272,8 @@ input[type="range"].slider::-webkit-slider-thumb {
   height: 34px;
   border-radius: 50%;
   background: #fff;
-  border: 3px solid var(--accent);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  border: 3px solid var(--blue);
+  box-shadow: 0 4px 16px rgba(32, 32, 32, 0.25);
   cursor: grab;
   transition: transform 0.08s ease;
 }
@@ -230,7 +288,7 @@ input[type="range"].slider::-moz-range-thumb {
   height: 34px;
   border-radius: 50%;
   background: #fff;
-  border: 3px solid var(--accent);
+  border: 3px solid var(--blue);
   cursor: grab;
 }
 
@@ -245,15 +303,16 @@ input[type="range"].slider::-moz-range-thumb {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--border);
+  background: var(--line);
 }
 
 .step-dots span.on {
-  background: var(--accent);
+  background: var(--blue);
 }
 
 a {
-  color: var(--accent);
+  color: var(--blue);
+  font-weight: 500;
 }
 
 /* ---- Logo ---- */
@@ -262,10 +321,10 @@ a {
   align-items: center;
   justify-content: center;
   background: #fff;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
   flex: none;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-sm);
 }
 
 .logo-badge img {
@@ -278,8 +337,41 @@ a {
   gap: 10px;
 }
 
+.brand strong {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Logo mit Gradient-Glow (Login / Onboarding) */
 .logo-hero {
   display: flex;
   justify-content: center;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+  position: relative;
+}
+
+.logo-hero::before {
+  content: "";
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: var(--grad);
+  filter: blur(38px);
+  opacity: 0.55;
+  z-index: 0;
+}
+
+.logo-hero .logo-badge {
+  position: relative;
+  z-index: 1;
+  border-radius: 22px;
+}
+
+/* Dekorativer Gradient-Streifen (z.B. unter dem Plan/Hero) */
+.gradient-strip {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--grad);
+  margin: 2px 0 16px;
 }

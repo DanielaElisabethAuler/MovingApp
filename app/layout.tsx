@@ -1,5 +1,13 @@
 import type { Metadata, Viewport } from "next";
+import { Poppins } from "next/font/google";
 import "./globals.css";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-poppins",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Felicurv",
@@ -17,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0e1116",
+  themeColor: "#f0efeb",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -29,8 +37,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de">
-      <body>
+    <html lang="de" className={poppins.variable}>
+      <body className={poppins.className}>
         <div className="wrap">{children}</div>
         {/* PWA: Service Worker registrieren (Installierbarkeit, Phase 1). */}
         <script

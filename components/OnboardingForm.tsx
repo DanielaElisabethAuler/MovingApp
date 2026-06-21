@@ -46,6 +46,7 @@ export function OnboardingForm({ profile }: { profile: ProfileRow | null }) {
       <div className="logo-hero">
         <Logo size={64} />
       </div>
+      <span className="eyebrow">Willkommen bei Felicurv</span>
       <h1>Lass uns starten</h1>
       <p className="muted">
         Das Ziel ist Konsistenz, nicht Stundenzahl. Der Boden bleibt winzig.

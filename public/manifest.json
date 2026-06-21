@@ -4,8 +4,8 @@
   "description": "Der Boden wird winzig und unkaputtbar, die Decke bleibt offen.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0e1116",
-  "theme_color": "#0e1116",
+  "background_color": "#f0efeb",
+  "theme_color": "#f0efeb",
   "icons": [
     {
       "src": "/icon-192.png",
