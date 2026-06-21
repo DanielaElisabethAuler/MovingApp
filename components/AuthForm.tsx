@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { Logo } from "./Logo";
 
 // Schlichtes E-Mail/Passwort-Login (gut lokal testbar). Magic-Link kann spaeter
 // ergaenzt werden; fuer das MVP reicht Passwort-Auth via Supabase.
@@ -42,6 +43,9 @@ export function AuthForm() {
 
   return (
     <div className="card">
+      <div className="logo-hero">
+        <Logo size={72} />
+      </div>
       <h1>{mode === "signin" ? "Einloggen" : "Account erstellen"}</h1>
       <form onSubmit={submit}>
         <label>E-Mail</label>

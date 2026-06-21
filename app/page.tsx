@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AuthForm } from "@/components/AuthForm";
 import { DemoBar } from "@/components/DemoBar";
+import { Logo } from "@/components/Logo";
 import { LogoutButton } from "@/components/LogoutButton";
 import { StreakBadge } from "@/components/StreakBadge";
 import { TodayFlow } from "@/components/TodayFlow";
@@ -39,7 +40,10 @@ export default async function Home() {
   return (
     <>
       <header className="row" style={{ justifyContent: "space-between", alignItems: "center" }}>
-        <strong>Bewegungs-Coach</strong>
+        <span className="brand">
+          <Logo size={36} />
+          <strong>Bewegungs-Coach</strong>
+        </span>
         <span className="row" style={{ gap: 14 }}>
           <Link href="/history">Verlauf</Link>
           {local ? <DemoBar /> : <LogoutButton />}

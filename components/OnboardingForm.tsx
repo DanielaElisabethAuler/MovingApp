@@ -6,6 +6,7 @@ import { saveProfile } from "@/app/actions";
 import { STYLE_BIAS } from "@/config/styleBias";
 import type { ProfileRow } from "@/lib/db/types";
 import type { Style } from "@/lib/domain/types";
+import { Logo } from "./Logo";
 
 const DEFAULT_MODALITIES = ["yoga", "joggen", "kraft", "dehnen", "spazieren"];
 
@@ -42,6 +43,9 @@ export function OnboardingForm({ profile }: { profile: ProfileRow | null }) {
 
   return (
     <form className="card" onSubmit={onSubmit}>
+      <div className="logo-hero">
+        <Logo size={64} />
+      </div>
       <h1>Lass uns starten</h1>
       <p className="muted">
         Das Ziel ist Konsistenz, nicht Stundenzahl. Der Boden bleibt winzig.

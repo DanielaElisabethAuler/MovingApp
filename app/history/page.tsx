@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Logo } from "@/components/Logo";
 import { StreakBadge } from "@/components/StreakBadge";
 import { SITUATION_CONFIG } from "@/config/situations";
 import { getCurrentUserId, getProfile, getRecentEntries } from "@/lib/db/repo";
@@ -25,7 +26,10 @@ export default async function HistoryPage() {
   return (
     <>
       <header className="row" style={{ justifyContent: "space-between", alignItems: "center" }}>
-        <strong>Verlauf</strong>
+        <span className="brand">
+          <Logo size={36} />
+          <strong>Verlauf</strong>
+        </span>
         <Link href="/">Heute</Link>
       </header>
 
