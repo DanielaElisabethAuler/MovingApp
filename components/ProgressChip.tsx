@@ -1,15 +1,42 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { ProgressStats } from "@/lib/progress";
+import type { ProgressMetric, ProgressStats } from "@/lib/progress";
+
+const RADIUS = 36;
+const CIRC = 2 * Math.PI * RADIUS;
+
+function Ring({ metric, shown }: { metric: ProgressMetric; shown: boolean }) {
+  const offset = shown && metric.hasData ? CIRC * (1 - metric.value) : CIRC;
+  return (
+    <div className="ring">
+      <div className="ring-circle">
+        <svg viewBox="0 0 86 86">
+          <circle className="ring-bg" cx="43" cy="43" r={RADIUS} />
+          <circle
+            className="ring-fg"
+            cx="43"
+            cy="43"
+            r={RADIUS}
+            style={{ strokeDasharray: CIRC, strokeDashoffset: offset }}
+          />
+        </svg>
+        <span className="ring-val">
+          {metric.hasData ? `${Math.round(metric.value * 100)}%` : "—"}
+        </span>
+      </div>
+      <span className="ring-label">{metric.label}</span>
+    </div>
+  );
+}
 
 export function ProgressChip({ stats }: { stats: ProgressStats }) {
   const [open, setOpen] = useState(false);
-  const [shown, setShown] = useState(false); // fuer die Regler-Animation
+  const [shown, setShown] = useState(false);
 
   useEffect(() => {
     if (open) {
-      const t = setTimeout(() => setShown(true), 30);
+      const t = setTimeout(() => setShown(true), 40);
       return () => clearTimeout(t);
     }
     setShown(false);
@@ -33,39 +60,25 @@ export function ProgressChip({ stats }: { stats: ProgressStats }) {
                 <span className="eyebrow">Dein Fortschritt</span>
                 <h2>Was du schon verbessert hast</h2>
               </div>
-              <button className="prog-close" onClick={() => setOpen(false)} aria-label="Schließen">
-                ✕
-              </button>
             </div>
 
             {stats.streak > 0 && (
-              <p className="muted" style={{ marginTop: -4 }}>
+              <p className="muted" style={{ marginTop: -2 }}>
                 Aktuelle Kette: <strong>{stats.streak} Tage</strong> 🔥
               </p>
             )}
 
-            <div style={{ marginTop: 16 }}>
+            <div className="prog-rings">
               {stats.metrics.map((m) => (
-                <div className="prog-metric" key={m.key}>
-                  <div className="prog-head">
-                    <span>{m.label}</span>
-                    <span className="prog-val">
-                      {m.hasData ? `${Math.round(m.value * 100)}%` : "—"}
-                    </span>
-                  </div>
-                  <div className="prog-track">
-                    <div
-                      className="prog-fill"
-                      style={{ width: shown && m.hasData ? `${Math.round(m.value * 100)}%` : "0%" }}
-                    >
-                      <span className="prog-knob" />
-                    </div>
-                  </div>
-                  <p className="prog-cap muted">
-                    {m.hasData ? m.caption : "Noch keine Daten — kommt mit der Zeit."}
-                  </p>
-                </div>
+                <Ring key={m.key} metric={m} shown={shown} />
               ))}
+            </div>
+
+            <div className="prog-foot">
+              <p className="prog-quote">„Nicht groß anfangen. Einfach anfangen.“</p>
+              <button className="prog-close-btn" onClick={() => setOpen(false)}>
+                Schließen
+              </button>
             </div>
           </div>
         </div>

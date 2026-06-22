@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { AuthCard } from "./AuthCard";
-import { Logo } from "./Logo";
 import { SlideToStart } from "./SlideToStart";
 
 // Einstiegs-Screen: vollflaechiger Farbverlauf, Slide-to-Start, dann Login-Glas.
@@ -13,11 +12,6 @@ export function Welcome() {
   return (
     <div className="welcome">
       <div className="welcome-panel">
-        <div className="welcome-brand">
-          <Logo size={26} />
-          <strong>vervou</strong>
-        </div>
-
         <div className="welcome-hero">
           <span className="welcome-eyebrow">Willkommen bei vervou</span>
           <h1 className="welcome-title">For the days you usually quit.</h1>
