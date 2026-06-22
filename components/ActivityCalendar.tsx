@@ -31,6 +31,7 @@ export function ActivityCalendar({
   entries,
   planned,
   modalities,
+  calendarConnected,
   today,
   initialYear,
   initialMonth,
@@ -38,6 +39,7 @@ export function ActivityCalendar({
   entries: CalDay[];
   planned: CalPlan[];
   modalities: string[];
+  calendarConnected: boolean;
   today: string;
   initialYear: number;
   initialMonth: number;
@@ -48,15 +50,17 @@ export function ActivityCalendar({
   const [sel, setSel] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [pickMod, setPickMod] = useState<string | null>(null);
+  const [manualTime, setManualTime] = useState("");
   const [slots, setSlots] = useState<string[]>([]);
 
   const map = new Map(entries.map((e) => [e.date, e]));
   const planMap = new Map(planned.map((p) => [p.date, p]));
 
-  // Bei Auswahl eines zukuenftigen, noch nicht geplanten Tages: freie Slots holen.
+  // Bei Auswahl eines Tages zuruecksetzen; Slot-Vorschlaege nur bei verbundenem Kalender.
   useEffect(() => {
     setPickMod(null);
-    if (sel && sel > today && !planMap.get(sel)) {
+    setManualTime("");
+    if (calendarConnected && sel && sel > today && !planMap.get(sel)) {
       getDaySlots({ date: sel })
         .then((r) => setSlots(r.slots ?? []))
         .catch(() => setSlots([]));
@@ -65,6 +69,11 @@ export function ActivityCalendar({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sel]);
+
+  async function savePlan(time: string | null) {
+    await run(() => planWorkout({ date: sel!, modality: pickMod!, time }));
+    setPickMod(null);
+  }
 
   const firstDow = (new Date(year, month, 1).getDay() + 6) % 7;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -217,43 +226,49 @@ export function ActivityCalendar({
               </div>
             </>
           ) : (
-            // Schritt 2: Uhrzeit waehlen (freie Slots aus dem Kalender)
+            // Schritt 2: Uhrzeit (manuell; Vorschlaege nur bei verbundenem Kalender)
             <>
               <h2 style={{ margin: "2px 0 8px", textTransform: "capitalize" }}>
                 {pickMod}
               </h2>
-              <p className="muted">Wann? Freie Zeiten aus deinem Kalender:</p>
-              <div className="row" style={{ marginTop: 10 }}>
-                {slots.map((s) => (
-                  <button
-                    key={s}
-                    className="choice"
-                    disabled={busy}
-                    style={{ flex: "1 1 46%" }}
-                    onClick={async () => {
-                      await run(() =>
-                        planWorkout({ date: sel, modality: pickMod, time: s }),
-                      );
-                      setPickMod(null);
-                    }}
-                  >
-                    {s}
-                  </button>
-                ))}
-                <button
-                  className="choice"
-                  disabled={busy}
-                  style={{ flex: "1 1 46%" }}
-                  onClick={async () => {
-                    await run(() =>
-                      planWorkout({ date: sel, modality: pickMod, time: null }),
-                    );
-                    setPickMod(null);
-                  }}
-                >
-                  Ohne feste Zeit
-                </button>
-              </div>
+
+              {calendarConnected && slots.length > 0 && (
+                <>
+                  <p className="muted">Freie Zeiten aus deinem Kalender:</p>
+                  <div className="row" style={{ margin: "8px 0 6px" }}>
+                    {slots.map((s) => (
+                      <button
+                        key={s}
+                        className="choice"
+                        disabled={busy}
+                        style={{ flex: "1 1 46%" }}
+                        onClick={() => savePlan(s)}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              <label>Uhrzeit (optional)</label>
+              <input
+                type="time"
+                value={manualTime}
+                onChange={(e) => setManualTime(e.target.value)}
+              />
+              <button
+                className="primary full"
+                disabled={busy}
+                style={{ marginTop: 12 }}
+                onClick={() => savePlan(manualTime || null)}
+              >
+                {busy
+                  ? "..."
+                  : manualTime
+                    ? `Für ${manualTime} Uhr planen`
+                    : "Ohne feste Zeit planen"}
+              </button>
               <button className="linklike" onClick={() => setPickMod(null)}>
                 ← andere Sportart
               </button>

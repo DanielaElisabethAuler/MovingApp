@@ -34,6 +34,7 @@ body {
   padding: 0;
   background: var(--bg);
   color: var(--text);
+  color-scheme: dark; /* native Controls (Uhrzeit etc.) im Dark-Mode */
   font-family: var(--font-bricolage), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -454,6 +455,7 @@ input[type="number"],
 input[type="email"],
 input[type="password"],
 input[type="url"],
+input[type="time"],
 select {
   width: 100%;
   font: inherit;

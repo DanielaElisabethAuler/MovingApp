@@ -42,8 +42,13 @@ export default async function HistoryPage() {
 
       <ActivityCalendar
         entries={days}
-        planned={planned.map((p) => ({ date: p.date, modality: p.modality }))}
+        planned={planned.map((p) => ({
+          date: p.date,
+          modality: p.modality,
+          time: p.time,
+        }))}
         modalities={profile.modalities}
+        calendarConnected={profile.integrations?.google_calendar ?? false}
         today={today}
         initialYear={yy}
         initialMonth={mm - 1}
