@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { BottomNav } from "@/components/BottomNav";
+import { CalendarConnect } from "@/components/CalendarConnect";
 import { DeleteAccountButton } from "@/components/DeleteAccountButton";
 import { DemoBar } from "@/components/DemoBar";
 import { LogoutButton } from "@/components/LogoutButton";
@@ -41,6 +42,12 @@ export default async function SettingsPage() {
         <div style={{ marginTop: 14 }}>
           <DeleteAccountButton />
         </div>
+      </div>
+
+      <div className="card">
+        <span className="eyebrow">Kalender</span>
+        <h2 style={{ margin: "4px 0 12px" }}>Verbinden</h2>
+        <CalendarConnect connected={profile.integrations?.google_calendar ?? false} />
       </div>
 
       <BottomNav />

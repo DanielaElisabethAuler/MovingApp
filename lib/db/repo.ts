@@ -196,7 +196,9 @@ export function isLocalMode(): boolean {
 export async function getPlannedWorkouts(): Promise<PlannedRow[]> {
   if (LOCAL) return localGetPlanned();
   const supabase = createClient();
-  const { data } = await supabase.from("planned_workouts").select("date, modality");
+  const { data } = await supabase
+    .from("planned_workouts")
+    .select("date, modality, time");
   return (data as PlannedRow[] | null) ?? [];
 }
 
@@ -204,15 +206,16 @@ export async function planWorkout(
   userId: string,
   date: string,
   modality: string,
+  time: string | null,
 ): Promise<void> {
   if (LOCAL) {
-    localUpsertPlanned(date, modality);
+    localUpsertPlanned(date, modality, time);
     return;
   }
   const supabase = createClient();
   await supabase
     .from("planned_workouts")
-    .upsert({ user_id: userId, date, modality }, { onConflict: "user_id,date" });
+    .upsert({ user_id: userId, date, modality, time }, { onConflict: "user_id,date" });
 }
 
 export async function unplanWorkout(userId: string, date: string): Promise<void> {

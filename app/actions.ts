@@ -30,15 +30,43 @@ export interface ActionResult {
   error?: string;
 }
 
-// --- Workout fuer kommenden Tag planen --------------------------------------
+// --- Freie Slots eines Tages (fuer die Uhrzeit-Auswahl beim Planen) ----------
+export async function getDaySlots(input: {
+  date: string;
+}): Promise<{ slots: string[] }> {
+  const calendar = getCalendarProvider();
+  const slots = await calendar.getFreeSlots(new Date(input.date));
+  return { slots: slots.map((s) => s.label) };
+}
+
+// --- Workout fuer kommenden Tag planen (mit Uhrzeit) ------------------------
 export async function planWorkout(input: {
   date: string;
   modality: string;
+  time?: string | null;
 }): Promise<ActionResult> {
   const userId = await getCurrentUserId();
   if (!userId) return { ok: false, error: "Nicht eingeloggt." };
-  await repoPlanWorkout(userId, input.date, input.modality);
+  await repoPlanWorkout(userId, input.date, input.modality, input.time ?? null);
   revalidatePath("/history");
+  return { ok: true };
+}
+
+// --- Kalender verbinden/trennen (Phase 1: Flag; echtes OAuth folgt) ----------
+export async function setCalendarConnected(input: {
+  connected: boolean;
+}): Promise<ActionResult> {
+  const userId = await getCurrentUserId();
+  if (!userId) return { ok: false, error: "Nicht eingeloggt." };
+  const profile = await getProfile();
+  const { error } = await upsertProfile(userId, {
+    integrations: {
+      google_calendar: input.connected,
+      sleep: profile?.integrations?.sleep ?? false,
+    },
+  });
+  if (error) return { ok: false, error };
+  revalidatePath("/settings");
   return { ok: true };
 }
 

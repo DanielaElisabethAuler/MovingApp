@@ -42,4 +42,5 @@ export interface PlannedRow {
   user_id: string;
   date: string; // YYYY-MM-DD
   modality: string;
+  time?: string | null; // gewaehlte Uhrzeit (z.B. "07:00-07:30")
 }

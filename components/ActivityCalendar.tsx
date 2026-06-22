@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { planWorkout, unplanWorkout } from "@/app/actions";
+import { useEffect, useState } from "react";
+import { getDaySlots, planWorkout, unplanWorkout } from "@/app/actions";
 
 const MONTHS = [
   "Januar", "Februar", "März", "April", "Mai", "Juni",
@@ -22,6 +22,7 @@ export interface CalDay {
 export interface CalPlan {
   date: string;
   modality: string;
+  time?: string | null;
 }
 
 const pad = (n: number) => n.toString().padStart(2, "0");
@@ -46,9 +47,24 @@ export function ActivityCalendar({
   const [month, setMonth] = useState(initialMonth);
   const [sel, setSel] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [pickMod, setPickMod] = useState<string | null>(null);
+  const [slots, setSlots] = useState<string[]>([]);
 
   const map = new Map(entries.map((e) => [e.date, e]));
   const planMap = new Map(planned.map((p) => [p.date, p]));
+
+  // Bei Auswahl eines zukuenftigen, noch nicht geplanten Tages: freie Slots holen.
+  useEffect(() => {
+    setPickMod(null);
+    if (sel && sel > today && !planMap.get(sel)) {
+      getDaySlots({ date: sel })
+        .then((r) => setSlots(r.slots ?? []))
+        .catch(() => setSlots([]));
+    } else {
+      setSlots([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sel]);
 
   const firstDow = (new Date(year, month, 1).getDay() + 6) % 7;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -166,39 +182,81 @@ export function ActivityCalendar({
                 <p className="muted">{selEntry.situation} — morgen wieder.</p>
               </>
             )
-          ) : (
-            // Zukunft: Workout planen
+          ) : selPlan ? (
+            // Schon geplant
             <>
-              <h2 style={{ margin: "2px 0 8px" }}>
-                {selPlan ? "Geplant" : "Workout planen"}
-              </h2>
-              {selPlan && (
-                <p className="muted" style={{ textTransform: "capitalize" }}>
-                  {selPlan.modality}
-                </p>
-              )}
+              <h2 style={{ margin: "2px 0 8px" }}>Geplant</h2>
+              <p className="muted" style={{ textTransform: "capitalize" }}>
+                {selPlan.modality}
+                {selPlan.time ? ` · ${selPlan.time}` : ""}
+              </p>
+              <button
+                className="linklike"
+                disabled={busy}
+                onClick={() => run(() => unplanWorkout({ date: sel }))}
+              >
+                Planung entfernen
+              </button>
+            </>
+          ) : !pickMod ? (
+            // Schritt 1: Sportart waehlen
+            <>
+              <h2 style={{ margin: "2px 0 8px" }}>Workout planen</h2>
+              <p className="muted">Was willst du machen?</p>
               <div className="row" style={{ marginTop: 10 }}>
                 {modalities.map((m) => (
                   <button
                     key={m}
-                    className={`choice${selPlan?.modality === m ? " selected" : ""}`}
-                    disabled={busy}
+                    className="choice"
                     style={{ flex: "1 1 30%", textTransform: "capitalize" }}
-                    onClick={() => run(() => planWorkout({ date: sel, modality: m }))}
+                    onClick={() => setPickMod(m)}
                   >
                     {m}
                   </button>
                 ))}
               </div>
-              {selPlan && (
+            </>
+          ) : (
+            // Schritt 2: Uhrzeit waehlen (freie Slots aus dem Kalender)
+            <>
+              <h2 style={{ margin: "2px 0 8px", textTransform: "capitalize" }}>
+                {pickMod}
+              </h2>
+              <p className="muted">Wann? Freie Zeiten aus deinem Kalender:</p>
+              <div className="row" style={{ marginTop: 10 }}>
+                {slots.map((s) => (
+                  <button
+                    key={s}
+                    className="choice"
+                    disabled={busy}
+                    style={{ flex: "1 1 46%" }}
+                    onClick={async () => {
+                      await run(() =>
+                        planWorkout({ date: sel, modality: pickMod, time: s }),
+                      );
+                      setPickMod(null);
+                    }}
+                  >
+                    {s}
+                  </button>
+                ))}
                 <button
-                  className="linklike"
+                  className="choice"
                   disabled={busy}
-                  onClick={() => run(() => unplanWorkout({ date: sel }))}
+                  style={{ flex: "1 1 46%" }}
+                  onClick={async () => {
+                    await run(() =>
+                      planWorkout({ date: sel, modality: pickMod, time: null }),
+                    );
+                    setPickMod(null);
+                  }}
                 >
-                  Planung entfernen
+                  Ohne feste Zeit
                 </button>
-              )}
+              </div>
+              <button className="linklike" onClick={() => setPickMod(null)}>
+                ← andere Sportart
+              </button>
             </>
           )}
           </>

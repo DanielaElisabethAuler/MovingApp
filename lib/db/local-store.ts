@@ -51,11 +51,19 @@ export function localGetPlanned(): PlannedRow[] {
   return read().planned;
 }
 
-export function localUpsertPlanned(date: string, modality: string): void {
+export function localUpsertPlanned(
+  date: string,
+  modality: string,
+  time: string | null,
+): void {
   const db = read();
   const idx = db.planned.findIndex((p) => p.date === date);
-  if (idx >= 0) db.planned[idx].modality = modality;
-  else db.planned.push({ user_id: LOCAL_USER_ID, date, modality });
+  if (idx >= 0) {
+    db.planned[idx].modality = modality;
+    db.planned[idx].time = time;
+  } else {
+    db.planned.push({ user_id: LOCAL_USER_ID, date, modality, time });
+  }
   write(db);
 }
 

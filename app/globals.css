@@ -620,6 +620,18 @@ a {
   margin: 6px 0 0;
 }
 
+.connect-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.connect-name {
+  font-weight: 600;
+}
+
 /* ---- Aktivitaets-Kalender ---- */
 .cal-head {
   display: flex;
@@ -872,7 +884,8 @@ a {
 }
 
 .hero-progress {
-  height: 30vh; /* kuerzer -> Kalender sitzt hoeher, Platz fuer Planung unten */
+  height: 48vh; /* Bild bis ~zur Haelfte, Kalender (Glas) ueberlappt hoch */
+  margin: -20px -18px -32vh;
   background-image: url(/bg/progress.png),
     radial-gradient(130% 120% at 72% 18%, #f6b35a 0%, #2f6f6a 52%, #163a38 100%);
 }
