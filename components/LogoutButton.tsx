@@ -6,15 +6,14 @@ import { createClient } from "@/lib/supabase/client";
 export function LogoutButton() {
   const router = useRouter();
   return (
-    <a
-      href="#"
-      onClick={async (e) => {
-        e.preventDefault();
+    <button
+      className="btn full"
+      onClick={async () => {
         await createClient().auth.signOut();
         router.refresh();
       }}
     >
-      Logout
-    </a>
+      Ausloggen
+    </button>
   );
 }

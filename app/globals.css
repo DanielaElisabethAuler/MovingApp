@@ -40,9 +40,10 @@ body {
 }
 
 .wrap {
+  position: relative;
   max-width: 520px;
   margin: 0 auto;
-  padding: 22px 18px 64px;
+  padding: 20px 18px 130px; /* unten Platz fuer die floating Nav */
 }
 
 header {
@@ -77,11 +78,14 @@ h1 {
   color: var(--muted);
 }
 
-/* ---- Karten (flach, warm, duenne Raender) ---- */
+/* ---- Karten: Milchglas (Glasmorphismus) ---- */
 .card {
   position: relative;
-  background: var(--card);
-  border: 1px solid var(--line);
+  z-index: 1;
+  background: rgba(244, 239, 226, 0.66);
+  backdrop-filter: blur(16px) saturate(1.1);
+  -webkit-backdrop-filter: blur(16px) saturate(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   border-radius: var(--radius);
   padding: 24px;
   margin: 14px 0;
@@ -371,4 +375,111 @@ a {
   border-radius: 999px;
   background: var(--grad);
   margin: 2px 0 16px;
+}
+
+/* ---- Topbar (nur Marke, ohne Logout/Verlauf) ---- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ---- Bild-Hero oben: runde Form, oben sichtbar, Rest faded ins Creme ---- */
+.hero {
+  position: relative;
+  height: 210px;
+  border-radius: 28px;
+  overflow: hidden;
+  margin-bottom: -62px; /* Inhalt darunter ueberlappt -> Glas vor Bild */
+  background-size: cover;
+  background-position: center;
+  box-shadow: var(--shadow);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(236, 231, 214, 0) 42%,
+    var(--bg) 96%
+  );
+}
+
+/* Echte Fotos in public/bg/*.jpg; bis dahin Orange/Teal-Verlauf als Fallback */
+.hero-today {
+  background-image: url(/bg/today.jpg),
+    radial-gradient(120% 120% at 28% 18%, #f6b35a 0%, #e98a3b 26%, #2f6f6a 68%, #163a38 100%);
+}
+
+.hero-progress {
+  background-image: url(/bg/progress.jpg),
+    radial-gradient(130% 120% at 72% 18%, #f6b35a 0%, #2f6f6a 52%, #163a38 100%);
+}
+
+.hero-profile {
+  background-image: url(/bg/profile.jpg),
+    radial-gradient(120% 120% at 50% 8%, #ecdcc0 0%, #6e9a86 45%, #2f6f6a 75%, #163a38 100%);
+}
+
+/* ---- Floating Bottom-Nav (Milchglas, schlicht, animiert) ---- */
+.bottom-nav {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  padding: 7px;
+  background: rgba(244, 239, 226, 0.72);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 999px;
+  box-shadow: 0 12px 34px rgba(20, 37, 40, 0.2);
+  z-index: 50;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.68rem;
+  font-weight: 600;
+  transition: color 0.2s ease, background 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.1s ease;
+}
+
+.nav-item svg {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-item:active {
+  transform: scale(0.88);
+}
+
+.nav-item.active {
+  color: var(--teal);
+  background: rgba(241, 154, 44, 0.2);
+}
+
+.nav-item.active svg {
+  transform: translateY(-1px) scale(1.08);
+}
+
+.nav-label {
+  line-height: 1;
 }

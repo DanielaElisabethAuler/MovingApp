@@ -1,9 +1,7 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AuthForm } from "@/components/AuthForm";
-import { DemoBar } from "@/components/DemoBar";
+import { BottomNav } from "@/components/BottomNav";
 import { Logo } from "@/components/Logo";
-import { LogoutButton } from "@/components/LogoutButton";
 import { StreakBadge } from "@/components/StreakBadge";
 import { TodayFlow } from "@/components/TodayFlow";
 import { todayStr } from "@/lib/date";
@@ -12,7 +10,6 @@ import {
   getProfile,
   getRecentEntries,
   getTodayEntry,
-  isLocalMode,
 } from "@/lib/db/repo";
 import { computeStreak, type DayResult } from "@/lib/domain/streak";
 import type { Outcome } from "@/lib/domain/types";
@@ -23,7 +20,6 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const userId = await getCurrentUserId();
   if (!userId) return <AuthForm />;
-  const local = isLocalMode();
 
   const profile = await getProfile();
   // Onboarding noch offen, solange kein Ziel gesetzt wurde.
@@ -39,19 +35,19 @@ export default async function Home() {
 
   return (
     <>
-      <header className="row" style={{ justifyContent: "space-between", alignItems: "center" }}>
+      <header className="topbar">
         <span className="brand">
-          <Logo size={36} />
+          <Logo size={32} />
           <strong>vervou</strong>
-        </span>
-        <span className="row" style={{ gap: 14 }}>
-          <Link href="/history">Verlauf</Link>
-          {local ? <DemoBar /> : <LogoutButton />}
         </span>
       </header>
 
+      <div className="hero hero-today" />
+
       <StreakBadge current={streak.current} longest={streak.longest} />
       <TodayFlow profile={profile} entry={entry} />
+
+      <BottomNav />
     </>
   );
 }

@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
+import { BottomNav } from "@/components/BottomNav";
 import { Logo } from "@/components/Logo";
 import { StreakBadge } from "@/components/StreakBadge";
 import { SITUATION_CONFIG } from "@/config/situations";
@@ -25,13 +25,14 @@ export default async function HistoryPage() {
 
   return (
     <>
-      <header className="row" style={{ justifyContent: "space-between", alignItems: "center" }}>
+      <header className="topbar">
         <span className="brand">
-          <Logo size={36} />
-          <strong>Verlauf</strong>
+          <Logo size={32} />
+          <strong>vervou</strong>
         </span>
-        <Link href="/">Heute</Link>
       </header>
+
+      <div className="hero hero-progress" />
 
       <StreakBadge current={streak.current} longest={streak.longest} />
 
@@ -66,6 +67,8 @@ export default async function HistoryPage() {
           </p>
         </div>
       ))}
+
+      <BottomNav />
     </>
   );
 }
