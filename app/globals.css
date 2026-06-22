@@ -1242,6 +1242,150 @@ a {
   text-decoration-color: var(--orange);
 }
 
+/* ============================================================
+   Onboarding-Wizard (ein Schritt pro Screen)
+   ============================================================ */
+.onboarding {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: auto;
+  color: #fff;
+  background:
+    linear-gradient(160deg, rgba(20, 37, 40, 0.5) 0%, rgba(20, 37, 40, 0.78) 100%),
+    url(/bg/progress.png);
+  background-size: cover;
+  background-position: center;
+}
+
+.ob-panel {
+  position: relative;
+  min-height: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: calc(20px + env(safe-area-inset-top)) 22px
+    calc(26px + env(safe-area-inset-bottom));
+}
+
+.ob-back {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  box-shadow: none;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 6px 0;
+  font-weight: 600;
+}
+
+.ob-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: ob-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes ob-in {
+  from {
+    opacity: 0;
+    transform: translateX(22px);
+  }
+}
+
+.ob-step h1 {
+  font-size: 2rem;
+  margin: 6px 0 18px;
+}
+
+.ob-hint {
+  color: rgba(255, 255, 255, 0.78);
+  margin: -8px 0 16px;
+}
+
+.ob-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 18px 20px;
+  margin-bottom: 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.ob-option.sel {
+  border-color: var(--orange);
+  background: rgba(241, 154, 44, 0.22);
+}
+
+.ob-sub {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.72);
+  margin-top: 3px;
+}
+
+.ob-check {
+  color: var(--orange);
+  font-weight: 700;
+}
+
+.ob-input {
+  width: 100%;
+  font: inherit;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--teal);
+  border: 1px solid transparent;
+  border-radius: 14px;
+  padding: 15px 16px;
+  margin-bottom: 16px;
+}
+
+.ob-input:focus {
+  outline: none;
+  border-color: var(--orange);
+  background: #fff;
+}
+
+.ob-next {
+  margin-top: 6px;
+}
+
+.ob-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.ob-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.3);
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.ob-dot.done {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.ob-dot.active {
+  width: 26px;
+  background: var(--orange);
+}
+
 /* ---- Desktop: Split-Layout, volle Breite ---- */
 @media (min-width: 880px) {
   .welcome {

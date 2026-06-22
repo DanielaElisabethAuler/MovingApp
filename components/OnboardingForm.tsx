@@ -3,34 +3,63 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { saveProfile } from "@/app/actions";
-import { STYLE_BIAS } from "@/config/styleBias";
 import type { ProfileRow } from "@/lib/db/types";
 import type { Style } from "@/lib/domain/types";
-import { Logo } from "./Logo";
 
-const DEFAULT_MODALITIES = ["yoga", "joggen", "kraft", "dehnen", "spazieren"];
+const GOALS = [
+  { value: "Marathon", label: "Marathon", sub: "Auf ein großes Ziel hinarbeiten" },
+  { value: "Stärker werden", label: "Stärker werden", sub: "Kraft & Muskeln aufbauen" },
+  { value: "Dranbleiben", label: "Einfach dranbleiben", sub: "Konsistenz vor allem" },
+  { value: "Besser schlafen", label: "Besser schlafen", sub: "Bewegung für die Erholung" },
+];
 
-// Onboarding (Spec 7.1): Wohin + Stil + Modalitaeten + Lieblingsworkout +
-// Kalender verbinden. Der Stil ist der "langsame Regler" des Users (Spec 2.1) —
-// das Tempo der Titration wird bewusst NICHT abgefragt (Spec 2.2).
+const STYLES: { value: Style; label: string; sub: string }[] = [
+  { value: "ambitioniert", label: "Ambitioniert", sub: "Größere Schritte, Decke offen" },
+  { value: "nachhaltig", label: "Nachhaltig", sub: "Moderat & stetig" },
+  { value: "dranbleiben", label: "Nur dranbleiben", sub: "Kleinster Nudge, Hauptsache dabei" },
+];
+
+const MODS = ["yoga", "joggen", "kraft", "dehnen", "spazieren"];
+const TOTAL = 5;
+
+function vibrate() {
+  if (typeof navigator !== "undefined" && navigator.vibrate) navigator.vibrate(10);
+}
+
 export function OnboardingForm({ profile }: { profile: ProfileRow | null }) {
   const router = useRouter();
+  const [step, setStep] = useState(0);
+  const [goal, setGoal] = useState(profile?.goal ?? "");
+  const [style, setStyle] = useState<Style>(profile?.style ?? "nachhaltig");
+  const [mods, setMods] = useState<string[]>(profile?.modalities ?? []);
+  const [favorite, setFavorite] = useState(profile?.favorite_workout ?? "");
+  const [music, setMusic] = useState(profile?.music_link ?? "");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [mods, setMods] = useState<string[]>(
-    profile?.modalities ?? ["yoga", "joggen", "kraft"],
-  );
 
-  function toggleMod(m: string) {
-    setMods((cur) => (cur.includes(m) ? cur.filter((x) => x !== m) : [...cur, m]));
+  const next = () => setStep((s) => Math.min(TOTAL - 1, s + 1));
+  const back = () => setStep((s) => Math.max(0, s - 1));
+
+  function pick<T>(setter: (v: T) => void, v: T) {
+    vibrate();
+    setter(v);
+    setTimeout(next, 220);
   }
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  function toggleMod(m: string) {
+    vibrate();
+    setMods((c) => (c.includes(m) ? c.filter((x) => x !== m) : [...c, m]));
+  }
+
+  async function finish() {
     setBusy(true);
     setError(null);
-    const fd = new FormData(e.currentTarget);
+    const fd = new FormData();
+    fd.set("goal", goal);
+    fd.set("style", style);
     fd.set("modalities", mods.join(","));
+    fd.set("favorite_workout", favorite);
+    fd.set("music_link", music);
     const res = await saveProfile(fd);
     setBusy(false);
     if (!res.ok) {
@@ -42,78 +71,128 @@ export function OnboardingForm({ profile }: { profile: ProfileRow | null }) {
   }
 
   return (
-    <form className="card" onSubmit={onSubmit}>
-      <div className="logo-hero">
-        <Logo size={80} />
-      </div>
-      <span className="eyebrow">vervou</span>
-      <h1>Lass uns starten</h1>
-      <p className="tagline">For the days you usually quit.</p>
-      <p className="muted">
-        Das Ziel ist Konsistenz, nicht Stundenzahl. Der Boden bleibt winzig.
-      </p>
-
-      <label>Wohin willst du? (dein Ziel)</label>
-      <input
-        type="text"
-        name="goal"
-        defaultValue={profile?.goal ?? ""}
-        placeholder="z.B. Marathon, staerker werden, einfach dranbleiben"
-      />
-
-      <label>Stil</label>
-      <select name="style" defaultValue={profile?.style ?? "nachhaltig"}>
-        {(Object.keys(STYLE_BIAS) as Style[]).map((s) => (
-          <option key={s} value={s}>
-            {STYLE_BIAS[s].label}
-          </option>
-        ))}
-      </select>
-
-      <label>Bewegungsarten (Rotation)</label>
-      <div className="row">
-        {DEFAULT_MODALITIES.map((m) => (
-          <button
-            type="button"
-            key={m}
-            className={mods.includes(m) ? "selected" : ""}
-            onClick={() => toggleMod(m)}
-          >
-            {m}
+    <div className="onboarding">
+      <div className="ob-panel">
+        {step > 0 && (
+          <button className="ob-back" onClick={back} aria-label="Zurück">
+            ‹ zurück
           </button>
-        ))}
+        )}
+
+        <div className="ob-step" key={step}>
+          {step === 0 && (
+            <>
+              <span className="eyebrow">Dein Ziel</span>
+              <h1>Wohin willst du?</h1>
+              {GOALS.map((g) => (
+                <button
+                  key={g.value}
+                  className={`ob-option${goal === g.value ? " sel" : ""}`}
+                  onClick={() => pick(setGoal, g.value)}
+                >
+                  <span>
+                    {g.label}
+                    <span className="ob-sub">{g.sub}</span>
+                  </span>
+                </button>
+              ))}
+            </>
+          )}
+
+          {step === 1 && (
+            <>
+              <span className="eyebrow">Dein Stil</span>
+              <h1>Wie willst du rangehen?</h1>
+              {STYLES.map((s) => (
+                <button
+                  key={s.value}
+                  className={`ob-option${style === s.value ? " sel" : ""}`}
+                  onClick={() => pick(setStyle, s.value)}
+                >
+                  <span>
+                    {s.label}
+                    <span className="ob-sub">{s.sub}</span>
+                  </span>
+                </button>
+              ))}
+            </>
+          )}
+
+          {step === 2 && (
+            <>
+              <span className="eyebrow">Bewegungsarten</span>
+              <h1>Was machst du gern?</h1>
+              <p className="ob-hint">Mehrere möglich.</p>
+              {MODS.map((m) => (
+                <button
+                  key={m}
+                  className={`ob-option${mods.includes(m) ? " sel" : ""}`}
+                  style={{ textTransform: "capitalize" }}
+                  onClick={() => toggleMod(m)}
+                >
+                  {m}
+                  <span className="ob-check">{mods.includes(m) ? "✓" : ""}</span>
+                </button>
+              ))}
+              <button
+                className="primary full ob-next"
+                disabled={mods.length === 0}
+                onClick={next}
+              >
+                Weiter
+              </button>
+            </>
+          )}
+
+          {step === 3 && (
+            <>
+              <span className="eyebrow">Für schwere Tage</span>
+              <h1>Dein Lieblingsworkout?</h1>
+              <p className="ob-hint">
+                Schlägt dir die App vor, wenn du im Loch bist. Optional.
+              </p>
+              <input
+                className="ob-input"
+                type="text"
+                value={favorite}
+                onChange={(e) => setFavorite(e.target.value)}
+                placeholder="z.B. lockerer Lauf mit Playlist"
+              />
+              <button className="primary full ob-next" onClick={next}>
+                {favorite ? "Weiter" : "Überspringen"}
+              </button>
+            </>
+          )}
+
+          {step === 4 && (
+            <>
+              <span className="eyebrow">Für den Antrieb</span>
+              <h1>Ein Musik-Link?</h1>
+              <p className="ob-hint">Für „im Loch"-Tage. Optional.</p>
+              <input
+                className="ob-input"
+                type="url"
+                value={music}
+                onChange={(e) => setMusic(e.target.value)}
+                placeholder="https://..."
+              />
+              <button className="primary full ob-next" disabled={busy} onClick={finish}>
+                {busy ? "..." : "Fertig — los geht's"}
+              </button>
+              {error && <div className="error">{error}</div>}
+            </>
+          )}
+        </div>
+
+        <div className="ob-dots">
+          {Array.from({ length: TOTAL }).map((_, i) => (
+            <span
+              key={i}
+              className={`ob-dot${i === step ? " active" : ""}${i < step ? " done" : ""}`}
+            />
+          ))}
+        </div>
       </div>
-
-      <label>Lieblingsworkout (fuer schwere Tage)</label>
-      <input
-        type="text"
-        name="favorite_workout"
-        defaultValue={profile?.favorite_workout ?? ""}
-        placeholder="z.B. lockerer Lauf mit Playlist"
-      />
-
-      <label>Musik-Link (fuer &quot;im Loch&quot;)</label>
-      <input
-        type="url"
-        name="music_link"
-        defaultValue={profile?.music_link ?? ""}
-        placeholder="https://..."
-      />
-
-      <label style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 16 }}>
-        <input
-          type="checkbox"
-          name="google_calendar"
-          defaultChecked={profile?.integrations?.google_calendar ?? false}
-          style={{ width: "auto" }}
-        />
-        Google Calendar verbinden (Phase 1: Mock-Kalender)
-      </label>
-
-      <button className="primary full" style={{ marginTop: 18 }} disabled={busy}>
-        {busy ? "..." : "Los geht's"}
-      </button>
-      {error && <div className="error">{error}</div>}
-    </form>
+    </div>
   );
 }
