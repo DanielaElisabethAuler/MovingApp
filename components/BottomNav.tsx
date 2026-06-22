@@ -1,9 +1,10 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
-// Minimalistische Linien-Icons (Tabler-Stil, stroke, runde Kappen).
 const iconProps = {
   viewBox: "0 0 24 24",
   fill: "none",
@@ -24,11 +25,13 @@ function RunIcon() {
   );
 }
 
-function ProgressIcon() {
+function CalendarIcon() {
   return (
     <svg {...iconProps}>
-      <path d="M3 17l6 -6l4 4l8 -8" />
-      <path d="M14 7l7 0l0 7" />
+      <rect x="4" y="5" width="16" height="16" rx="2" />
+      <path d="M16 3v4" />
+      <path d="M8 3v4" />
+      <path d="M4 9h16" />
     </svg>
   );
 }
@@ -44,29 +47,54 @@ function ProfileIcon() {
 
 const ITEMS = [
   { href: "/", label: "Heute", Icon: RunIcon },
-  { href: "/history", label: "Fortschritt", Icon: ProgressIcon },
+  { href: "/history", label: "Kalender", Icon: CalendarIcon },
   { href: "/profile", label: "Profil", Icon: ProfileIcon },
 ];
 
 export function BottomNav() {
   const pathname = usePathname();
+  // Default eingeklappt; beim allerersten Besuch kurz ausgeklappt zeigen.
+  const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => {
+    const seen = localStorage.getItem("vervou_nav_seen");
+    if (!seen) {
+      setExpanded(true);
+      const t = setTimeout(() => {
+        setExpanded(false);
+        localStorage.setItem("vervou_nav_seen", "1");
+      }, 3000);
+      return () => clearTimeout(t);
+    }
+  }, []);
+
   return (
-    <nav className="bottom-nav">
-      {ITEMS.map(({ href, label, Icon }) => {
-        const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
-        return (
-          <Link
-            key={href}
-            href={href}
-            className={`nav-item${active ? " active" : ""}`}
-            aria-label={label}
-            aria-current={active ? "page" : undefined}
-          >
-            <Icon />
-            <span className="nav-label">{label}</span>
-          </Link>
-        );
-      })}
+    <nav className={`bottom-nav${expanded ? " expanded" : " collapsed"}`}>
+      <div className="nav-items">
+        {ITEMS.map(({ href, label, Icon }) => {
+          const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={`nav-item${active ? " active" : ""}`}
+              aria-label={label}
+              aria-current={active ? "page" : undefined}
+              tabIndex={expanded ? 0 : -1}
+            >
+              <Icon />
+            </Link>
+          );
+        })}
+      </div>
+
+      <button
+        className="nav-toggle"
+        onClick={() => setExpanded((e) => !e)}
+        aria-label={expanded ? "Menü einklappen" : "Menü öffnen"}
+      >
+        <img src="/logo.svg" alt="vervou" width={26} height={26} />
+      </button>
     </nav>
   );
 }

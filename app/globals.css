@@ -741,10 +741,10 @@ a {
 /* ---- Floating Bottom-Nav (Milchglas, schlicht, animiert) ---- */
 .bottom-nav {
   position: fixed;
+  right: 16px;
   bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
+  align-items: center;
   gap: 2px;
   padding: 5px;
   background: rgba(20, 37, 40, 0.66);
@@ -756,26 +756,42 @@ a {
   z-index: 50;
 }
 
-.nav-item {
+/* Linke Icons (Heute/Kalender/Profil) — klappen nach rechts ein */
+.nav-items {
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 2px;
-  padding: 7px 16px;
-  border-radius: 999px;
+  max-width: 320px;
+  overflow: hidden;
+  transition: max-width 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease,
+    margin 0.4s ease;
+}
+
+.bottom-nav.collapsed .nav-items {
+  max-width: 0;
+  opacity: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 50%;
   border: none;
   background: transparent;
   color: var(--muted);
   text-decoration: none;
-  font-size: 0.6rem;
-  font-weight: 600;
   transition: color 0.2s ease, background 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
     transform 0.1s ease;
 }
 
 .nav-item svg {
-  width: 21px;
-  height: 21px;
+  width: 22px;
+  height: 22px;
+  display: block;
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -792,8 +808,28 @@ a {
   transform: scale(1.06);
 }
 
-.nav-label {
-  line-height: 1;
+/* vervou-Icon rechts = Toggle */
+.nav-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  background: rgba(236, 231, 214, 0.1);
+  flex: none;
+}
+
+.nav-toggle:active {
+  transform: scale(0.92);
+}
+
+.nav-toggle img {
+  width: 26px;
+  height: 26px;
+  display: block;
 }
 
 /* ---- Splash-Screen beim App-Start (gruenes Icon mittig) ---- */
