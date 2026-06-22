@@ -741,11 +741,12 @@ a {
 /* ---- Floating Bottom-Nav (Milchglas, schlicht, animiert) ---- */
 .bottom-nav {
   position: fixed;
-  right: 16px;
+  left: 50%;
+  transform: translateX(-50%);
   bottom: 16px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0;
   padding: 6px 8px;
   background: rgba(20, 37, 40, 0.66);
   backdrop-filter: blur(20px) saturate(1.2);
@@ -756,7 +757,7 @@ a {
   z-index: 50;
 }
 
-/* Linke Icons (Heute/Kalender/Profil) — klappen nach rechts ein */
+/* Icon-Gruppen links/rechts des zentralen V — klappen zur Mitte ein */
 .nav-items {
   display: flex;
   align-items: center;
@@ -765,6 +766,14 @@ a {
   overflow: hidden;
   transition: max-width 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease,
     margin 0.4s ease;
+}
+
+.nav-left {
+  margin-right: 8px;
+}
+
+.nav-right {
+  margin-left: 8px;
 }
 
 .bottom-nav.collapsed .nav-items {

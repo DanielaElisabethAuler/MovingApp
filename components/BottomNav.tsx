@@ -45,15 +45,26 @@ function ProfileIcon() {
   );
 }
 
-const ITEMS = [
+function SettingsIcon() {
+  return (
+    <svg {...iconProps}>
+      <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+const LEFT = [
   { href: "/", label: "Heute", Icon: RunIcon },
   { href: "/history", label: "Kalender", Icon: CalendarIcon },
+];
+const RIGHT = [
   { href: "/profile", label: "Profil", Icon: ProfileIcon },
+  { href: "/settings", label: "Einstellungen", Icon: SettingsIcon },
 ];
 
 export function BottomNav() {
   const pathname = usePathname();
-  // Default eingeklappt; beim allerersten Besuch kurz ausgeklappt zeigen.
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
@@ -68,25 +79,25 @@ export function BottomNav() {
     }
   }, []);
 
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  const item = ({ href, label, Icon }: (typeof LEFT)[number]) => (
+    <Link
+      key={href}
+      href={href}
+      className={`nav-item${isActive(href) ? " active" : ""}`}
+      aria-label={label}
+      aria-current={isActive(href) ? "page" : undefined}
+      tabIndex={expanded ? 0 : -1}
+    >
+      <Icon />
+    </Link>
+  );
+
   return (
     <nav className={`bottom-nav${expanded ? " expanded" : " collapsed"}`}>
-      <div className="nav-items">
-        {ITEMS.map(({ href, label, Icon }) => {
-          const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={`nav-item${active ? " active" : ""}`}
-              aria-label={label}
-              aria-current={active ? "page" : undefined}
-              tabIndex={expanded ? 0 : -1}
-            >
-              <Icon />
-            </Link>
-          );
-        })}
-      </div>
+      <div className="nav-items nav-left">{LEFT.map(item)}</div>
 
       <button
         className="nav-toggle"
@@ -95,6 +106,8 @@ export function BottomNav() {
       >
         <img src="/vmark.svg" alt="vervou" width={22} height={22} />
       </button>
+
+      <div className="nav-items nav-right">{RIGHT.map(item)}</div>
     </nav>
   );
 }
