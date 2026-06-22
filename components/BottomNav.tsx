@@ -93,7 +93,7 @@ export function BottomNav() {
         onClick={() => setExpanded((e) => !e)}
         aria-label={expanded ? "Menü einklappen" : "Menü öffnen"}
       >
-        <img src="/logo.svg" alt="vervou" width={26} height={26} />
+        <img src="/vmark.svg" alt="vervou" width={22} height={22} />
       </button>
     </nav>
   );

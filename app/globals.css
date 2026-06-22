@@ -745,8 +745,8 @@ a {
   bottom: 16px;
   display: flex;
   align-items: center;
-  gap: 2px;
-  padding: 5px;
+  gap: 8px;
+  padding: 6px 8px;
   background: rgba(20, 37, 40, 0.66);
   backdrop-filter: blur(20px) saturate(1.2);
   -webkit-backdrop-filter: blur(20px) saturate(1.2);
@@ -760,7 +760,7 @@ a {
 .nav-items {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 8px;
   max-width: 320px;
   overflow: hidden;
   transition: max-width 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease,
@@ -808,27 +808,25 @@ a {
   transform: scale(1.06);
 }
 
-/* vervou-Icon rechts = Toggle */
+/* vervou-Icon rechts = Toggle (transparent, gleich gross wie die anderen) */
 .nav-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  padding: 0;
+  padding: 10px;
   border-radius: 50%;
   border: none;
-  background: rgba(236, 231, 214, 0.1);
+  background: transparent;
   flex: none;
 }
 
 .nav-toggle:active {
-  transform: scale(0.92);
+  transform: scale(0.9);
 }
 
 .nav-toggle img {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   display: block;
 }
 
