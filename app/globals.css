@@ -608,68 +608,16 @@ a {
   text-underline-offset: 3px;
 }
 
-/* ---- Kalender-Screen: passt genau in die Viewhoehe, kein Scrollen ---- */
-.cal-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg);
-  padding: 0 14px calc(86px + env(safe-area-inset-bottom));
-  overflow: hidden;
-}
-
-.cal-hero {
-  flex: none;
-  height: 20vh;
-  margin: 0 -14px;
-  position: relative;
-  overflow: hidden;
-  border-radius: 0 0 26px 26px;
-  background-image:
-    linear-gradient(
-      to bottom,
-      rgba(20, 37, 40, 0.32) 0%,
-      rgba(20, 37, 40, 0) 40%,
-      rgba(236, 231, 214, 0) 84%,
-      var(--bg) 100%
-    ),
-    url(/bg/progress.png);
-  background-size: cover;
-  background-position: center;
-}
-
-.cal-card {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  margin: 12px 0 0;
-  padding: 16px 18px;
-  overflow: hidden;
-}
-
-.cal-card .cal-grid {
-  flex: 1;
-  grid-auto-rows: 1fr;
-  align-content: stretch;
-}
-
+/* ---- Kalender: Detail/Planung unter dem Kalender, ohne eigenen Kasten ---- */
 .cal-detail {
-  flex: none;
-  margin: 10px 0 0;
-  min-height: 64px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  margin: 20px 6px 0;
 }
 
 .cal-placeholder {
   text-align: center;
   color: var(--muted);
   font-weight: 600;
-  margin: 0;
+  margin: 6px 0 0;
 }
 
 /* ---- Aktivitaets-Kalender ---- */
@@ -924,6 +872,7 @@ a {
 }
 
 .hero-progress {
+  height: 30vh; /* kuerzer -> Kalender sitzt hoeher, Platz fuer Planung unten */
   background-image: url(/bg/progress.png),
     radial-gradient(130% 120% at 72% 18%, #f6b35a 0%, #2f6f6a 52%, #163a38 100%);
 }

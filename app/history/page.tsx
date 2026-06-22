@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { ActivityCalendar, type CalDay } from "@/components/ActivityCalendar";
 import { BottomNav } from "@/components/BottomNav";
-import { ProgressChip } from "@/components/ProgressChip";
+import { PageHero } from "@/components/PageHero";
 import { SITUATION_CONFIG } from "@/config/situations";
 import { todayStr } from "@/lib/date";
 import {
@@ -10,7 +10,6 @@ import {
   getProfile,
   getRecentEntries,
 } from "@/lib/db/repo";
-import { getProgressStats } from "@/lib/progress";
 
 export const dynamic = "force-dynamic";
 
@@ -34,15 +33,12 @@ export default async function HistoryPage() {
     }));
 
   const planned = await getPlannedWorkouts();
-  const stats = await getProgressStats();
   const today = todayStr();
   const [yy, mm] = today.split("-").map(Number);
 
   return (
-    <div className="cal-screen">
-      <div className="cal-hero">
-        <ProgressChip stats={stats} />
-      </div>
+    <>
+      <PageHero variant="progress" />
 
       <ActivityCalendar
         entries={days}
@@ -54,6 +50,6 @@ export default async function HistoryPage() {
       />
 
       <BottomNav />
-    </div>
+    </>
   );
 }

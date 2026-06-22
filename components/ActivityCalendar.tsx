@@ -85,7 +85,7 @@ export function ActivityCalendar({
 
   return (
     <>
-      <div className="card cal-card">
+      <div className="card">
         <div className="cal-head">
           <button className="cal-nav" onClick={() => step(-1)} aria-label="Voriger Monat">
             ‹
@@ -140,7 +140,7 @@ export function ActivityCalendar({
         </div>
       </div>
 
-      <div className="card cal-detail">
+      <div className="cal-detail">
         {!sel || !(selEntry || selFuture) ? (
           <p className="cal-placeholder">Plan your next days</p>
         ) : (
