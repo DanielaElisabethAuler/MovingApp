@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque } from "next/font/google";
+import { RefreshOnFocus } from "@/components/RefreshOnFocus";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -44,6 +45,7 @@ export default function RootLayout({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/icon.svg" alt="" width={132} height={132} />
         </div>
+        <RefreshOnFocus />
         <div className="wrap">{children}</div>
         {/* PWA-SW registrieren + Splash ausblenden. */}
         <script
