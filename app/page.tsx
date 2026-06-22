@@ -37,7 +37,7 @@ export default async function Home() {
     <>
       <header className="topbar">
         <span className="brand">
-          <Logo size={32} />
+          <Logo size={40} />
           <strong>vervou</strong>
         </span>
       </header>

@@ -44,7 +44,7 @@ export function AuthForm() {
   return (
     <div className="card">
       <div className="logo-hero">
-        <Logo size={72} />
+        <Logo size={92} />
       </div>
       <span className="eyebrow">vervou</span>
       <h1>{mode === "signin" ? "Einloggen" : "Account erstellen"}</h1>

@@ -44,7 +44,7 @@ export function OnboardingForm({ profile }: { profile: ProfileRow | null }) {
   return (
     <form className="card" onSubmit={onSubmit}>
       <div className="logo-hero">
-        <Logo size={64} />
+        <Logo size={80} />
       </div>
       <span className="eyebrow">vervou</span>
       <h1>Lass uns starten</h1>

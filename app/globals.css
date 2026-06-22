@@ -483,3 +483,37 @@ a {
 .nav-label {
   line-height: 1;
 }
+
+/* ---- Splash-Screen beim App-Start (gruenes Icon mittig) ---- */
+#splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  transition: opacity 0.55s ease;
+}
+
+#splash img {
+  width: 132px;
+  height: 132px;
+  border-radius: 30px;
+  box-shadow: 0 16px 44px rgba(20, 37, 40, 0.28);
+  animation: splash-pulse 1.2s ease-in-out infinite alternate;
+}
+
+#splash.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes splash-pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}

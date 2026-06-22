@@ -21,7 +21,7 @@ export default async function ProfilePage() {
     <>
       <header className="topbar">
         <span className="brand">
-          <Logo size={32} />
+          <Logo size={40} />
           <strong>vervou</strong>
         </span>
       </header>

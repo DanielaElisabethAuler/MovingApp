@@ -39,8 +39,13 @@ export default function RootLayout({
   return (
     <html lang="de" className={bricolage.variable}>
       <body className={bricolage.className}>
+        {/* Splash beim App-Start: gruenes Icon mittig, blendet nach Laden aus. */}
+        <div id="splash" aria-hidden="true">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/icon.svg" alt="" width={132} height={132} />
+        </div>
         <div className="wrap">{children}</div>
-        {/* PWA: Service Worker registrieren (Installierbarkeit, Phase 1). */}
+        {/* PWA-SW registrieren + Splash ausblenden. */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -49,6 +54,14 @@ export default function RootLayout({
                   navigator.serviceWorker.register('/sw.js').catch(function(){});
                 });
               }
+              window.addEventListener('load', function () {
+                var s = document.getElementById('splash');
+                if (!s) return;
+                setTimeout(function () {
+                  s.classList.add('hide');
+                  setTimeout(function () { s.style.display = 'none'; }, 600);
+                }, 450);
+              });
             `,
           }}
         />
