@@ -1,11 +1,8 @@
 import { redirect } from "next/navigation";
 import { BottomNav } from "@/components/BottomNav";
 import { PageHero } from "@/components/PageHero";
-import { StreakBadge } from "@/components/StreakBadge";
 import { SITUATION_CONFIG } from "@/config/situations";
 import { getCurrentUserId, getProfile, getRecentEntries } from "@/lib/db/repo";
-import { computeStreak, type DayResult } from "@/lib/domain/streak";
-import type { Outcome } from "@/lib/domain/types";
 
 export const dynamic = "force-dynamic";
 
@@ -17,17 +14,10 @@ export default async function HistoryPage() {
   if (!profile || !profile.goal) redirect("/onboarding");
 
   const entries = await getRecentEntries(60);
-  const days: DayResult[] = entries
-    .filter((e) => e.outcome !== null)
-    .sort((a, b) => a.date.localeCompare(b.date))
-    .map((e) => ({ outcome: e.outcome as Outcome, chaos: e.calendar_packed }));
-  const streak = computeStreak(days);
 
   return (
     <>
       <PageHero variant="progress" />
-
-      <StreakBadge current={streak.current} longest={streak.longest} />
 
       {entries.length === 0 && (
         <div className="card">
