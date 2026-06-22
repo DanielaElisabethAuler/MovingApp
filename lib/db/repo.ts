@@ -41,6 +41,16 @@ export async function getCurrentUserId(): Promise<string | null> {
   return user?.id ?? null;
 }
 
+// E-Mail des angemeldeten Accounts (zum Pruefen, ob beide Geraete derselbe sind).
+export async function getCurrentUserEmail(): Promise<string | null> {
+  if (LOCAL) return null;
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return user?.email ?? null;
+}
+
 export async function getProfile(): Promise<ProfileRow | null> {
   if (LOCAL) return localGetProfile();
   const supabase = createClient();

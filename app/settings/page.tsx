@@ -5,7 +5,12 @@ import { DemoBar } from "@/components/DemoBar";
 import { LogoutButton } from "@/components/LogoutButton";
 import { PageHero } from "@/components/PageHero";
 import { Welcome } from "@/components/Welcome";
-import { getCurrentUserId, getProfile, isLocalMode } from "@/lib/db/repo";
+import {
+  getCurrentUserEmail,
+  getCurrentUserId,
+  getProfile,
+  isLocalMode,
+} from "@/lib/db/repo";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +21,7 @@ export default async function SettingsPage() {
   const profile = await getProfile();
   if (!profile || !profile.goal) redirect("/onboarding");
   const local = isLocalMode();
+  const email = await getCurrentUserEmail();
 
   return (
     <>
@@ -24,6 +30,13 @@ export default async function SettingsPage() {
       <div className="card">
         <span className="eyebrow">Einstellungen</span>
         <h1>Konto</h1>
+        <p className="muted" style={{ marginTop: 10 }}>
+          Angemeldet als <strong>{email ?? "Demo-Modus"}</strong>
+        </p>
+        <p className="muted" style={{ fontSize: "0.82rem" }}>
+          Auf Handy und Desktop muss exakt diese E-Mail stehen, damit alles
+          synchron ist.
+        </p>
         <div style={{ marginTop: 16 }}>{local ? <DemoBar /> : <LogoutButton />}</div>
         <div style={{ marginTop: 14 }}>
           <DeleteAccountButton />
