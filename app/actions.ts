@@ -5,6 +5,7 @@ import { getCalendarProvider } from "@/lib/calendar";
 import { todayStr } from "@/lib/date";
 import {
   bumpRotation,
+  deleteUserData,
   getCurrentUserId,
   getLearningState,
   getProfile,
@@ -25,6 +26,16 @@ import type { NoShowReason, Outcome, Situation, Style } from "@/lib/domain/types
 export interface ActionResult {
   ok: boolean;
   error?: string;
+}
+
+// --- Konto/Profil loeschen --------------------------------------------------
+export async function deleteAccount(): Promise<ActionResult> {
+  const userId = await getCurrentUserId();
+  if (!userId) return { ok: false, error: "Nicht eingeloggt." };
+  await deleteUserData(userId);
+  revalidatePath("/");
+  revalidatePath("/profile");
+  return { ok: true };
 }
 
 // --- Demo-Modus: lokalen Store zuruecksetzen (nur ohne Supabase) ------------

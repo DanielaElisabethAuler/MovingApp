@@ -10,6 +10,7 @@ import {
   localGetProfile,
   localGetRecentEntries,
   localGetTodayEntry,
+  localReset,
   localSaveLearningState,
   localUpdateDailyEntry,
   localUpsertDailyEntry,
@@ -171,4 +172,18 @@ export async function saveLearningState(
 
 export function isLocalMode(): boolean {
   return LOCAL;
+}
+
+// Konto/Profil loeschen: alle eigenen Daten entfernen (RLS erlaubt das fuer die
+// eigenen Zeilen) und ausloggen. Im Demo-Modus = lokalen Store leeren.
+export async function deleteUserData(userId: string): Promise<void> {
+  if (LOCAL) {
+    localReset();
+    return;
+  }
+  const supabase = createClient();
+  await supabase.from("daily_entries").delete().eq("user_id", userId);
+  await supabase.from("learning_state").delete().eq("user_id", userId);
+  await supabase.from("profiles").delete().eq("id", userId);
+  await supabase.auth.signOut();
 }

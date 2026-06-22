@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { BottomNav } from "@/components/BottomNav";
+import { DeleteAccountButton } from "@/components/DeleteAccountButton";
 import { DemoBar } from "@/components/DemoBar";
 import { LogoutButton } from "@/components/LogoutButton";
 import { PageHero } from "@/components/PageHero";
@@ -42,6 +43,12 @@ export default async function ProfilePage() {
         <div style={{ marginTop: 20 }}>
           {local ? <DemoBar /> : <LogoutButton />}
         </div>
+      </div>
+
+      <div className="card">
+        <span className="eyebrow">Konto</span>
+        <h2 style={{ margin: "4px 0 12px" }}>Einstellungen</h2>
+        <DeleteAccountButton />
       </div>
 
       <BottomNav />

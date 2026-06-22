@@ -1,17 +1,17 @@
-import { Logo } from "./Logo";
+import { getProgressStats } from "@/lib/progress";
+import { ProgressChip } from "./ProgressChip";
 
-// Randloser Bild-Hero oben (links/rechts/oben bis zum Rand), Marke als Chip drauf.
-export function PageHero({
+// Randloser Bild-Hero oben. Oben links: Fortschritts-Chip (Phasen-Satz) statt
+// Marke — oeffnet das Fortschritts-Glasfenster.
+export async function PageHero({
   variant,
 }: {
   variant: "today" | "progress" | "profile";
 }) {
+  const stats = await getProgressStats();
   return (
     <div className={`hero hero-${variant}`}>
-      <span className="hero-brand">
-        <Logo size={20} />
-        <strong>vervou</strong>
-      </span>
+      <ProgressChip stats={stats} />
     </div>
   );
 }
