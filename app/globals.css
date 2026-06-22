@@ -635,10 +635,14 @@ a {
 }
 
 /* ---- Wochenansicht ---- */
+.week-card {
+  padding: 18px 14px;
+}
+
 .week-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  gap: 5px;
   margin-top: 8px;
 }
 
@@ -646,24 +650,27 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
+  min-width: 0;
 }
 
 .week-wd {
-  font-size: 0.66rem;
+  font-size: 0.62rem;
   color: var(--muted);
 }
 
+/* Responsive: Kreise fuellen ihre Spalte -> alle 7 Tage passen immer rein */
 .week-circle {
-  width: 42px;
-  height: 42px;
+  width: 100%;
+  max-width: 46px;
+  aspect-ratio: 1;
   padding: 0;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--text);
   background: rgba(236, 231, 214, 0.06);
   border: 1px solid var(--line);
