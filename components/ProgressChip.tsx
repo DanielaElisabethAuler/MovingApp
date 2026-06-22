@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import type { ProgressMetric, ProgressStats } from "@/lib/progress";
 
 const RADIUS = 36;
@@ -52,8 +53,9 @@ export function ProgressChip({ stats }: { stats: ProgressStats }) {
         <span className="chip-text">{stats.phase}</span>
       </button>
 
-      {open && (
-        <div className="prog-overlay" onClick={() => setOpen(false)}>
+      {open &&
+        createPortal(
+          <div className="prog-overlay" onClick={() => setOpen(false)}>
           <div className="prog-modal" onClick={(e) => e.stopPropagation()}>
             <div className="prog-modal-head">
               <div>
@@ -81,8 +83,9 @@ export function ProgressChip({ stats }: { stats: ProgressStats }) {
               </button>
             </div>
           </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
     </>
   );
 }

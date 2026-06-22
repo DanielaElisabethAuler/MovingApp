@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const iconProps = {
   viewBox: "0 0 24 24",
@@ -65,19 +65,8 @@ const RIGHT = [
 
 export function BottomNav() {
   const pathname = usePathname();
-  const [expanded, setExpanded] = useState(false);
-
-  useEffect(() => {
-    const seen = localStorage.getItem("vervou_nav_seen");
-    if (!seen) {
-      setExpanded(true);
-      const t = setTimeout(() => {
-        setExpanded(false);
-        localStorage.setItem("vervou_nav_seen", "1");
-      }, 3000);
-      return () => clearTimeout(t);
-    }
-  }, []);
+  // Standardmaessig ausgeklappt (kann ueber das V manuell eingeklappt werden).
+  const [expanded, setExpanded] = useState(true);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);

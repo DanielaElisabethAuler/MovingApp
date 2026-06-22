@@ -37,3 +37,9 @@ export interface LearningStateRow {
   upper_edge_min: number;
   step_min: number;
 }
+
+export interface PlannedRow {
+  user_id: string;
+  date: string; // YYYY-MM-DD
+  modality: string;
+}

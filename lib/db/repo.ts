@@ -9,14 +9,22 @@ import {
   localGetLearningState,
   localGetProfile,
   localGetRecentEntries,
+  localGetPlanned,
   localGetTodayEntry,
+  localRemovePlanned,
   localReset,
   localSaveLearningState,
   localUpdateDailyEntry,
   localUpsertDailyEntry,
+  localUpsertPlanned,
   localUpsertProfile,
 } from "./local-store";
-import type { DailyEntryRow, LearningStateRow, ProfileRow } from "./types";
+import type {
+  DailyEntryRow,
+  LearningStateRow,
+  PlannedRow,
+  ProfileRow,
+} from "./types";
 
 // Datenzugriff. Brancht zwischen lokalem Demo-Store (kein Supabase noetig) und
 // Supabase (RLS-geschuetzt). Die Geschaeftslogik lebt in lib/domain/*; hier nur
@@ -172,6 +180,38 @@ export async function saveLearningState(
 
 export function isLocalMode(): boolean {
   return LOCAL;
+}
+
+// --- Geplante Workouts ------------------------------------------------------
+export async function getPlannedWorkouts(): Promise<PlannedRow[]> {
+  if (LOCAL) return localGetPlanned();
+  const supabase = createClient();
+  const { data } = await supabase.from("planned_workouts").select("date, modality");
+  return (data as PlannedRow[] | null) ?? [];
+}
+
+export async function planWorkout(
+  userId: string,
+  date: string,
+  modality: string,
+): Promise<void> {
+  if (LOCAL) {
+    localUpsertPlanned(date, modality);
+    return;
+  }
+  const supabase = createClient();
+  await supabase
+    .from("planned_workouts")
+    .upsert({ user_id: userId, date, modality }, { onConflict: "user_id,date" });
+}
+
+export async function unplanWorkout(userId: string, date: string): Promise<void> {
+  if (LOCAL) {
+    localRemovePlanned(date);
+    return;
+  }
+  const supabase = createClient();
+  await supabase.from("planned_workouts").delete().eq("date", date);
 }
 
 // Konto/Profil loeschen: alle eigenen Daten entfernen (RLS erlaubt das fuer die

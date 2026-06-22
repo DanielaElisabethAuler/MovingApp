@@ -41,9 +41,11 @@ body {
 
 .wrap {
   position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
   max-width: 520px;
   margin: 0 auto;
-  padding: 20px 18px 130px; /* unten Platz fuer die floating Nav */
+  padding: 20px 18px 104px; /* unten Platz fuer die floating Nav */
 }
 
 header {
@@ -262,8 +264,8 @@ button.full {
   max-width: 78%;
   padding: 8px 14px 8px 11px;
   border-radius: 999px;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.16);
+  color: var(--cream);
+  background: rgba(255, 255, 255, 0.14);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -638,7 +640,7 @@ a {
 .cal-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+  gap: 3px;
 }
 
 .cal-wd {
@@ -649,9 +651,9 @@ a {
 }
 
 .cal-day {
-  aspect-ratio: 1;
+  min-height: 40px;
   width: 100%;
-  padding: 0;
+  padding: 4px 0;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -686,6 +688,11 @@ a {
   cursor: pointer;
 }
 
+.cal-day.planned {
+  background: rgba(236, 231, 214, 0.07);
+  box-shadow: inset 0 0 0 1px rgba(236, 231, 214, 0.25);
+}
+
 .cal-day.today {
   box-shadow: inset 0 0 0 1px var(--cream);
 }
@@ -709,6 +716,10 @@ a {
 .cal-dot.noshow {
   background: transparent;
   border: 1px solid var(--muted);
+}
+
+.cal-dot.planned {
+  background: var(--cream);
 }
 
 .cal-legend {
@@ -793,8 +804,8 @@ a {
 /* ---- Randloser Bild-Hero: oben/links/rechts bis zum Rand, unten gerundet ---- */
 .hero {
   position: relative;
-  height: 75vh; /* Bild = 3/4 vom Screen */
-  margin: -20px -18px -46vh; /* randlos + Inhalt startet weiter oben ueber dem Bild */
+  height: 40vh; /* kompakter, damit der Screen ohne Scrollen passt */
+  margin: -20px -18px -18vh; /* randlos + Inhalt startet weiter oben ueber dem Bild */
   border-radius: 0 0 32px 32px;
   overflow: hidden;
   background-size: cover;

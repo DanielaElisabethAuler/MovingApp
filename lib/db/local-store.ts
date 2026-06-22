@@ -1,7 +1,12 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Situation } from "@/lib/domain/types";
-import type { DailyEntryRow, LearningStateRow, ProfileRow } from "./types";
+import type {
+  DailyEntryRow,
+  LearningStateRow,
+  PlannedRow,
+  ProfileRow,
+} from "./types";
 
 // ============================================================================
 // Lokaler Demo-Store (dateibasiert) — DEV-FALLBACK ohne Supabase.
@@ -16,17 +21,20 @@ interface LocalDb {
   profile: ProfileRow | null;
   entries: DailyEntryRow[];
   learning: LearningStateRow[];
+  planned: PlannedRow[];
 }
+
+const EMPTY: LocalDb = { profile: null, entries: [], learning: [], planned: [] };
 
 const DATA_DIR = join(process.cwd(), ".localdata");
 const DB_FILE = join(DATA_DIR, "db.json");
 
 function read(): LocalDb {
   try {
-    if (!existsSync(DB_FILE)) return { profile: null, entries: [], learning: [] };
-    return JSON.parse(readFileSync(DB_FILE, "utf8")) as LocalDb;
+    if (!existsSync(DB_FILE)) return { ...EMPTY };
+    return { ...EMPTY, ...(JSON.parse(readFileSync(DB_FILE, "utf8")) as LocalDb) };
   } catch {
-    return { profile: null, entries: [], learning: [] };
+    return { ...EMPTY };
   }
 }
 
@@ -36,7 +44,25 @@ function write(db: LocalDb): void {
 }
 
 export function localReset(): void {
-  write({ profile: null, entries: [], learning: [] });
+  write({ ...EMPTY });
+}
+
+export function localGetPlanned(): PlannedRow[] {
+  return read().planned;
+}
+
+export function localUpsertPlanned(date: string, modality: string): void {
+  const db = read();
+  const idx = db.planned.findIndex((p) => p.date === date);
+  if (idx >= 0) db.planned[idx].modality = modality;
+  else db.planned.push({ user_id: LOCAL_USER_ID, date, modality });
+  write(db);
+}
+
+export function localRemovePlanned(date: string): void {
+  const db = read();
+  db.planned = db.planned.filter((p) => p.date !== date);
+  write(db);
 }
 
 export function localGetProfile(): ProfileRow | null {

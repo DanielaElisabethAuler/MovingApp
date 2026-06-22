@@ -4,7 +4,12 @@ import { BottomNav } from "@/components/BottomNav";
 import { PageHero } from "@/components/PageHero";
 import { SITUATION_CONFIG } from "@/config/situations";
 import { todayStr } from "@/lib/date";
-import { getCurrentUserId, getProfile, getRecentEntries } from "@/lib/db/repo";
+import {
+  getCurrentUserId,
+  getPlannedWorkouts,
+  getProfile,
+  getRecentEntries,
+} from "@/lib/db/repo";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +32,7 @@ export default async function HistoryPage() {
       situation: SITUATION_CONFIG[e.situation].label,
     }));
 
+  const planned = await getPlannedWorkouts();
   const today = todayStr();
   const [yy, mm] = today.split("-").map(Number);
 
@@ -36,6 +42,8 @@ export default async function HistoryPage() {
 
       <ActivityCalendar
         entries={days}
+        planned={planned.map((p) => ({ date: p.date, modality: p.modality }))}
+        modalities={profile.modalities}
         today={today}
         initialYear={yy}
         initialMonth={mm - 1}

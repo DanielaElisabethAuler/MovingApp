@@ -11,7 +11,9 @@ import {
   getProfile,
   getRecentEntries,
   getTodayEntry,
+  planWorkout as repoPlanWorkout,
   saveLearningState,
+  unplanWorkout as repoUnplanWorkout,
   updateDailyEntry,
   upsertDailyEntry,
   upsertProfile,
@@ -26,6 +28,26 @@ import type { NoShowReason, Outcome, Situation, Style } from "@/lib/domain/types
 export interface ActionResult {
   ok: boolean;
   error?: string;
+}
+
+// --- Workout fuer kommenden Tag planen --------------------------------------
+export async function planWorkout(input: {
+  date: string;
+  modality: string;
+}): Promise<ActionResult> {
+  const userId = await getCurrentUserId();
+  if (!userId) return { ok: false, error: "Nicht eingeloggt." };
+  await repoPlanWorkout(userId, input.date, input.modality);
+  revalidatePath("/history");
+  return { ok: true };
+}
+
+export async function unplanWorkout(input: { date: string }): Promise<ActionResult> {
+  const userId = await getCurrentUserId();
+  if (!userId) return { ok: false, error: "Nicht eingeloggt." };
+  await repoUnplanWorkout(userId, input.date);
+  revalidatePath("/history");
+  return { ok: true };
 }
 
 // --- Konto/Profil loeschen --------------------------------------------------
