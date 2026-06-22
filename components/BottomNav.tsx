@@ -97,7 +97,7 @@ export function BottomNav() {
 
   return (
     <nav className={`bottom-nav${expanded ? " expanded" : " collapsed"}`}>
-      <div className="nav-items nav-left">{LEFT.map(item)}</div>
+      {LEFT.map(item)}
 
       <button
         className="nav-toggle"
@@ -107,7 +107,7 @@ export function BottomNav() {
         <img src="/vmark.svg" alt="vervou" width={26} height={26} />
       </button>
 
-      <div className="nav-items nav-right">{RIGHT.map(item)}</div>
+      {RIGHT.map(item)}
     </nav>
   );
 }
