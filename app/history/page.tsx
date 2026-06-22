@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { BottomNav } from "@/components/BottomNav";
-import { Logo } from "@/components/Logo";
+import { PageHero } from "@/components/PageHero";
 import { StreakBadge } from "@/components/StreakBadge";
 import { SITUATION_CONFIG } from "@/config/situations";
 import { getCurrentUserId, getProfile, getRecentEntries } from "@/lib/db/repo";
@@ -25,14 +25,7 @@ export default async function HistoryPage() {
 
   return (
     <>
-      <header className="topbar">
-        <span className="brand">
-          <Logo size={40} />
-          <strong>vervou</strong>
-        </span>
-      </header>
-
-      <div className="hero hero-progress" />
+      <PageHero variant="progress" />
 
       <StreakBadge current={streak.current} longest={streak.longest} />
 

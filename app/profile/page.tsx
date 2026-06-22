@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
-import { AuthForm } from "@/components/AuthForm";
 import { BottomNav } from "@/components/BottomNav";
 import { DemoBar } from "@/components/DemoBar";
-import { Logo } from "@/components/Logo";
 import { LogoutButton } from "@/components/LogoutButton";
+import { PageHero } from "@/components/PageHero";
+import { Welcome } from "@/components/Welcome";
 import { STYLE_BIAS } from "@/config/styleBias";
 import { getCurrentUserId, getProfile, isLocalMode } from "@/lib/db/repo";
 
@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export default async function ProfilePage() {
   const userId = await getCurrentUserId();
-  if (!userId) return <AuthForm />;
+  if (!userId) return <Welcome />;
 
   const profile = await getProfile();
   if (!profile || !profile.goal) redirect("/onboarding");
@@ -19,14 +19,7 @@ export default async function ProfilePage() {
 
   return (
     <>
-      <header className="topbar">
-        <span className="brand">
-          <Logo size={40} />
-          <strong>vervou</strong>
-        </span>
-      </header>
-
-      <div className="hero hero-profile" />
+      <PageHero variant="profile" />
 
       <div className="card">
         <span className="eyebrow">Profil</span>

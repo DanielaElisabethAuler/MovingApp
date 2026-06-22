@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
-import { AuthForm } from "@/components/AuthForm";
 import { BottomNav } from "@/components/BottomNav";
-import { Logo } from "@/components/Logo";
+import { PageHero } from "@/components/PageHero";
 import { StreakBadge } from "@/components/StreakBadge";
 import { TodayFlow } from "@/components/TodayFlow";
+import { Welcome } from "@/components/Welcome";
 import { todayStr } from "@/lib/date";
 import {
   getCurrentUserId,
@@ -19,7 +19,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const userId = await getCurrentUserId();
-  if (!userId) return <AuthForm />;
+  if (!userId) return <Welcome />;
 
   const profile = await getProfile();
   // Onboarding noch offen, solange kein Ziel gesetzt wurde.
@@ -35,14 +35,7 @@ export default async function Home() {
 
   return (
     <>
-      <header className="topbar">
-        <span className="brand">
-          <Logo size={40} />
-          <strong>vervou</strong>
-        </span>
-      </header>
-
-      <div className="hero hero-today" />
+      <PageHero variant="today" />
 
       <StreakBadge current={streak.current} longest={streak.longest} />
       <TodayFlow profile={profile} entry={entry} />
