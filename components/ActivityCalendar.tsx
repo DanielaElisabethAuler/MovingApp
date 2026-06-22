@@ -85,7 +85,7 @@ export function ActivityCalendar({
 
   return (
     <>
-      <div className="card">
+      <div className="card cal-card">
         <div className="cal-head">
           <button className="cal-nav" onClick={() => step(-1)} aria-label="Voriger Monat">
             ‹
@@ -140,8 +140,11 @@ export function ActivityCalendar({
         </div>
       </div>
 
-      {sel && (selEntry || selFuture) && (
-        <div className="card">
+      <div className="card cal-detail">
+        {!sel || !(selEntry || selFuture) ? (
+          <p className="cal-placeholder">Plan your next days</p>
+        ) : (
+          <>
           <span className="eyebrow">
             {Number(sel.slice(8))}. {MONTHS[Number(sel.slice(5, 7)) - 1]}
           </span>
@@ -198,8 +201,9 @@ export function ActivityCalendar({
               )}
             </>
           )}
-        </div>
-      )}
+          </>
+        )}
+      </div>
     </>
   );
 }

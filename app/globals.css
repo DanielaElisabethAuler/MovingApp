@@ -608,6 +608,70 @@ a {
   text-underline-offset: 3px;
 }
 
+/* ---- Kalender-Screen: passt genau in die Viewhoehe, kein Scrollen ---- */
+.cal-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  padding: 0 14px calc(86px + env(safe-area-inset-bottom));
+  overflow: hidden;
+}
+
+.cal-hero {
+  flex: none;
+  height: 20vh;
+  margin: 0 -14px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 26px 26px;
+  background-image:
+    linear-gradient(
+      to bottom,
+      rgba(20, 37, 40, 0.32) 0%,
+      rgba(20, 37, 40, 0) 40%,
+      rgba(236, 231, 214, 0) 84%,
+      var(--bg) 100%
+    ),
+    url(/bg/progress.png);
+  background-size: cover;
+  background-position: center;
+}
+
+.cal-card {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin: 12px 0 0;
+  padding: 16px 18px;
+  overflow: hidden;
+}
+
+.cal-card .cal-grid {
+  flex: 1;
+  grid-auto-rows: 1fr;
+  align-content: stretch;
+}
+
+.cal-detail {
+  flex: none;
+  margin: 10px 0 0;
+  min-height: 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cal-placeholder {
+  text-align: center;
+  color: var(--muted);
+  font-weight: 600;
+  margin: 0;
+}
+
 /* ---- Aktivitaets-Kalender ---- */
 .cal-head {
   display: flex;
@@ -1251,11 +1315,31 @@ a {
   z-index: 100;
   overflow: auto;
   color: #fff;
-  background:
-    linear-gradient(160deg, rgba(20, 37, 40, 0.5) 0%, rgba(20, 37, 40, 0.78) 100%),
+  background: var(--bg); /* unten dunkel */
+}
+
+/* Bild nur im oberen Drittel, faded ins Dunkle */
+.onboarding::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 36vh;
+  z-index: 0;
+  background-image: linear-gradient(
+      to bottom,
+      rgba(20, 37, 40, 0.25) 0%,
+      rgba(20, 37, 40, 0) 35%,
+      var(--bg) 96%
+    ),
     url(/bg/progress.png);
   background-size: cover;
   background-position: center;
+}
+
+.ob-panel {
+  z-index: 1;
 }
 
 .ob-panel {
