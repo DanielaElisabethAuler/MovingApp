@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { ActivityCalendar, type CalDay } from "@/components/ActivityCalendar";
+import { ActivityWeek, type CalDay } from "@/components/ActivityWeek";
 import { BottomNav } from "@/components/BottomNav";
 import { PageHero } from "@/components/PageHero";
 import { SITUATION_CONFIG } from "@/config/situations";
@@ -34,13 +34,12 @@ export default async function HistoryPage() {
 
   const planned = await getPlannedWorkouts();
   const today = todayStr();
-  const [yy, mm] = today.split("-").map(Number);
 
   return (
     <>
       <PageHero variant="progress" />
 
-      <ActivityCalendar
+      <ActivityWeek
         entries={days}
         planned={planned.map((p) => ({
           date: p.date,
@@ -50,8 +49,6 @@ export default async function HistoryPage() {
         modalities={profile.modalities}
         calendarConnected={profile.integrations?.google_calendar ?? false}
         today={today}
-        initialYear={yy}
-        initialMonth={mm - 1}
       />
 
       <BottomNav />
