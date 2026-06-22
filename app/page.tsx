@@ -4,7 +4,9 @@ import { PageHero } from "@/components/PageHero";
 import { StreakBadge } from "@/components/StreakBadge";
 import { TodayFlow } from "@/components/TodayFlow";
 import { Welcome } from "@/components/Welcome";
+import { getCalendarProvider } from "@/lib/calendar";
 import { todayStr } from "@/lib/date";
+import { guessSituation } from "@/lib/domain/guess";
 import {
   getCurrentUserId,
   getProfile,
@@ -26,6 +28,11 @@ export default async function Home() {
   if (!profile || !profile.goal) redirect("/onboarding");
 
   const entry = await getTodayEntry(todayStr());
+
+  // "Rate erst, frag dann": Vermutung aus dem Kalender bilden.
+  const calendarPacked = await getCalendarProvider().isPackedDay(new Date());
+  const guess = guessSituation({ calendarPacked });
+
   const recent = await getRecentEntries(40);
   const days: DayResult[] = recent
     .filter((e) => e.outcome !== null)
@@ -38,7 +45,7 @@ export default async function Home() {
       <PageHero variant="today" />
 
       <StreakBadge current={streak.current} longest={streak.longest} />
-      <TodayFlow profile={profile} entry={entry} />
+      <TodayFlow profile={profile} entry={entry} guess={guess} />
 
       <BottomNav />
     </>

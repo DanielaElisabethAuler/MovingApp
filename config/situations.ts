@@ -10,8 +10,11 @@ import type { Modality, Situation } from "@/lib/domain/types";
 
 export interface SituationConfig {
   situation: Situation;
-  label: string; // UI-Text
-  hint: string; // kurze Erklaerung im Picker
+  label: string; // UI-Text (Kategorie, auch im Verlauf)
+  tile: string; // kurzes Wort fuer die Kachel (Vorderseite, kein Erklaertext)
+  feeling: string; // Ich-Botschaft fuer die Vermutung ("klingt wie ein Freund")
+  icon: string; // Emoji-Icon fuer die Kachel
+  hint: string; // Erklaerung — erscheint ERST nach der Wahl, nicht davor
   // Welche Modalitaeten hier erlaubt sind. Leer => nutze User-Modalitaeten/Rotation.
   // Bei wenig_energie bewusst eingeschraenkt (kein joggen/heben).
   allowedModalities: Modality[] | "user";
@@ -36,6 +39,9 @@ export const SITUATION_CONFIG: Record<Situation, SituationConfig> = {
   gut: {
     situation: "gut",
     label: "Guter Tag",
+    tile: "Gut drauf",
+    feeling: "Heute ist gut was drin.",
+    icon: "☀️",
     hint: "Voller Vorschlag, Decke offen.",
     allowedModalities: "user",
     preferFavorite: false,
@@ -50,6 +56,9 @@ export const SITUATION_CONFIG: Record<Situation, SituationConfig> = {
   wenig_energie: {
     situation: "wenig_energie",
     label: "Wenig Energie",
+    tile: "Wenig Energie",
+    feeling: "Heute ist nicht viel drin.",
+    icon: "🌙",
     hint: "Schlecht geschlafen oder krank — sanft bleiben.",
     allowedModalities: ["yoga", "dehnen", "spazieren"],
     preferFavorite: false,
@@ -64,6 +73,9 @@ export const SITUATION_CONFIG: Record<Situation, SituationConfig> = {
   keine_zeit: {
     situation: "keine_zeit",
     label: "Keine Zeit",
+    tile: "Wenig Zeit",
+    feeling: "Heute ist wenig Zeit.",
+    icon: "⏳",
     hint: "Voller Tag — in eine freie Minute legen.",
     allowedModalities: "user",
     preferFavorite: false,
@@ -80,6 +92,9 @@ export const SITUATION_CONFIG: Record<Situation, SituationConfig> = {
   anderes_wichtiger: {
     situation: "anderes_wichtiger",
     label: "Anderes wichtiger",
+    tile: "Kopf woanders",
+    feeling: "Heute zählt was anderes.",
+    icon: "🎯",
     hint: "Bewegung in die Prioritaet legen — Denk-Spaziergang, Walking Call.",
     allowedModalities: ["spazieren"],
     preferFavorite: false,
@@ -94,6 +109,9 @@ export const SITUATION_CONFIG: Record<Situation, SituationConfig> = {
   im_loch: {
     situation: "im_loch",
     label: "Im Loch",
+    tile: "Im Loch",
+    feeling: "Heute fehlt der Antrieb.",
+    icon: "🌧️",
     hint: "Kein Antrieb — Musik an, Lieblingsworkout, niedrigste Schwelle.",
     allowedModalities: "user",
     preferFavorite: true,

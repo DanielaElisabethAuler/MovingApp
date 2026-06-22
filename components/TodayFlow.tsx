@@ -6,15 +6,18 @@ import { completeDay, missDay, startDay } from "@/app/actions";
 import { NO_SHOW_REASON_LIST } from "@/config/noShowReasons";
 import { SITUATION_CONFIG } from "@/config/situations";
 import type { DailyEntryRow, ProfileRow } from "@/lib/db/types";
+import type { SituationGuess } from "@/lib/domain/guess";
 import { SITUATIONS, type NoShowReason, type Situation } from "@/lib/domain/types";
 import { PostFeelingSlider } from "./PostFeelingSlider";
 
 export function TodayFlow({
   profile,
   entry,
+  guess,
 }: {
   profile: ProfileRow;
   entry: DailyEntryRow | null;
+  guess: SituationGuess;
 }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -23,6 +26,9 @@ export function TodayFlow({
   // Lokale Schritte vor dem ersten Speichern.
   const [situation, setSituation] = useState<Situation | null>(null);
   const [floor, setFloor] = useState<number>(10);
+  const [picking, setPicking] = useState(false); // Vermutung abgelehnt -> Kacheln
+  const [showMore, setShowMore] = useState(false); // "etwas anderes?"
+  const [selecting, setSelecting] = useState<Situation | null>(null); // Tap-Animation
   // Nach dem Plan: Outcome-Verzweigung.
   const [missMode, setMissMode] = useState(false);
   const [doneMode, setDoneMode] = useState(false);
@@ -37,6 +43,16 @@ export function TodayFlow({
       return;
     }
     router.refresh();
+  }
+
+  // Fuehlbares Tippen: Haptik + kurzes "Atmen" der Kachel, dann weicher Wechsel.
+  function choose(s: Situation) {
+    if (typeof navigator !== "undefined" && navigator.vibrate) navigator.vibrate(12);
+    setSelecting(s);
+    setTimeout(() => {
+      setSituation(s);
+      setSelecting(null);
+    }, 220);
   }
 
   // ---- Ergebnis schon geloggt: Zusammenfassung -----------------------------
@@ -87,13 +103,8 @@ export function TodayFlow({
               </button>
             ))}
           </div>
-          <button
-            className="full"
-            style={{ marginTop: 12 }}
-            onClick={() => setMissMode(false)}
-            disabled={busy}
-          >
-            Zurueck
+          <button className="linklike" onClick={() => setMissMode(false)} disabled={busy}>
+            Zurück
           </button>
           {error && <div className="error">{error}</div>}
         </div>
@@ -155,43 +166,91 @@ export function TodayFlow({
     );
   }
 
-  // ---- Noch kein Eintrag: Situation waehlen --------------------------------
+  // ---- Situation: erst raten, dann (falls nötig) wählen --------------------
   if (!situation) {
+    // Vermutung bestätigen (eine Entscheidung statt fünf).
+    if (!picking) {
+      const g = SITUATION_CONFIG[guess.situation];
+      return (
+        <div className="card">
+          <span className="eyebrow">Dein Tag</span>
+          <h1>{g.feeling}</h1>
+          <p className="muted">{guess.reason} Passt das?</p>
+          <button
+            className="primary full"
+            style={{ marginTop: 18 }}
+            onClick={() => choose(guess.situation)}
+          >
+            Ja, los
+          </button>
+          <button className="linklike" onClick={() => setPicking(true)}>
+            Ne, ist anders
+          </button>
+        </div>
+      );
+    }
+
+    // Kacheln: Wort + Icon, reduziert (2 wahrscheinliche + "etwas anderes?").
+    const others = SITUATIONS.filter((s) => s !== guess.situation);
+    const prominent = others.slice(0, 2);
+    const rest = others.slice(2);
+
+    const tile = (s: Situation) => {
+      const cfg = SITUATION_CONFIG[s];
+      return (
+        <button
+          key={s}
+          className={`choice tile${selecting === s ? " breathe" : ""}`}
+          onClick={() => choose(s)}
+        >
+          <span className="tile-icon">{cfg.icon}</span>
+          <span className="tile-word">{cfg.tile}</span>
+        </button>
+      );
+    };
+
     return (
       <div className="card">
         <span className="eyebrow">Dein Tag</span>
-        <h1>Wie ist dein Tag gerade?</h1>
-        <p className="muted">Das passt den Plan an dich an — nicht umgekehrt.</p>
-        <div className="row" style={{ marginTop: 12 }}>
-          {SITUATIONS.map((s) => {
-            const cfg = SITUATION_CONFIG[s];
-            return (
-              <button key={s} className="choice" onClick={() => setSituation(s)}>
-                {cfg.label}
-                <span className="sub">{cfg.hint}</span>
-              </button>
-            );
-          })}
-        </div>
+        <h1>Wie fühlt sich heute an?</h1>
+        <div className="row" style={{ marginTop: 14 }}>{prominent.map(tile)}</div>
+        {!showMore ? (
+          <button className="linklike" onClick={() => setShowMore(true)}>
+            etwas anderes?
+          </button>
+        ) : (
+          <div className="row" style={{ marginTop: 10 }}>{rest.map(tile)}</div>
+        )}
       </div>
     );
   }
 
-  // ---- Boden-Eingabe -------------------------------------------------------
+  // ---- Boden-Eingabe (Erklärung erscheint JETZT, nach der Wahl) ------------
+  const cfg = SITUATION_CONFIG[situation];
   return (
     <div className="card">
       <button
-        className="muted"
-        onClick={() => setSituation(null)}
-        style={{ marginBottom: 12 }}
+        className="linklike back"
+        onClick={() => {
+          setSituation(null);
+          setPicking(false);
+          setShowMore(false);
+        }}
       >
-        ← {SITUATION_CONFIG[situation].label}
+        ← zurück
       </button>
+
+      <div className="chosen">
+        <span className="chosen-icon">{cfg.icon}</span>
+        <div>
+          <strong>{cfg.feeling}</strong>
+          <span className="muted">{cfg.hint}</span>
+        </div>
+      </div>
+
       <span className="eyebrow">Der Boden</span>
       <h1>Was ist das Kleinste, das du jetzt machst?</h1>
-      <p className="muted">
-        Der Boden. Er muss winzig genug sein, dass du ihn sicher schaffst.
-      </p>
+      <p className="muted">Winzig genug, dass du ihn sicher schaffst.</p>
       <label>Minuten</label>
       <input
         type="number"

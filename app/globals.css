@@ -163,6 +163,93 @@ button.full {
   font-weight: 400;
 }
 
+/* Situations-Kachel: Icon + Wort, kein Erklaertext auf der Vorderseite */
+.choice.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 18px;
+}
+
+.tile-icon {
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.tile-word {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.choice.breathe {
+  border-color: var(--teal);
+  background: rgba(20, 37, 40, 0.07);
+  animation: tile-breathe 0.22s ease;
+}
+
+@keyframes tile-breathe {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Textbutton (z.B. "Ne, ist anders", "etwas anderes?", "zurück") */
+.linklike {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  color: var(--muted);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.linklike:hover {
+  color: var(--teal);
+}
+
+.linklike.back {
+  width: auto;
+  margin: 0 0 12px;
+  padding: 0;
+  text-align: left;
+}
+
+/* Bestaetigung der Wahl auf dem Boden-Screen (Erklaerung erscheint hier) */
+.chosen {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(20, 37, 40, 0.06);
+  margin-bottom: 18px;
+}
+
+.chosen-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.chosen strong {
+  display: block;
+  font-weight: 700;
+}
+
+.chosen .muted {
+  font-size: 0.85rem;
+}
+
 /* ---- Inputs ---- */
 input[type="text"],
 input[type="number"],
