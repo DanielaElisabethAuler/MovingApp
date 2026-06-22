@@ -744,10 +744,10 @@ a {
   left: 50%;
   transform: translateX(-50%);
   bottom: 16px;
+  width: 66px; /* eingeklappt: nur das V */
   display: flex;
   align-items: center;
-  gap: 0;
-  padding: 6px 8px;
+  padding: 7px;
   background: rgba(20, 37, 40, 0.66);
   backdrop-filter: blur(20px) saturate(1.2);
   -webkit-backdrop-filter: blur(20px) saturate(1.2);
@@ -755,31 +755,29 @@ a {
   border-radius: 999px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.32);
   z-index: 50;
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bottom-nav.expanded {
+  width: min(calc(100vw - 20px), 600px); /* ausgeklappt ueber die ganze Breite */
 }
 
 /* Icon-Gruppen links/rechts des zentralen V — klappen zur Mitte ein */
 .nav-items {
+  flex-grow: 1;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-around;
   max-width: 320px;
   overflow: hidden;
   transition: max-width 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease,
-    margin 0.4s ease;
-}
-
-.nav-left {
-  margin-right: 8px;
-}
-
-.nav-right {
-  margin-left: 8px;
+    flex-grow 0.45s ease;
 }
 
 .bottom-nav.collapsed .nav-items {
+  flex-grow: 0;
   max-width: 0;
   opacity: 0;
-  margin: 0;
   pointer-events: none;
 }
 
@@ -787,7 +785,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding: 12px;
   border-radius: 50%;
   border: none;
   background: transparent;
@@ -798,8 +796,8 @@ a {
 }
 
 .nav-item svg {
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   display: block;
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -817,12 +815,12 @@ a {
   transform: scale(1.06);
 }
 
-/* vervou-Icon rechts = Toggle (transparent, gleich gross wie die anderen) */
+/* vervou-Icon (Mitte) = Toggle, transparent, gleich gross */
 .nav-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding: 12px;
   border-radius: 50%;
   border: none;
   background: transparent;
@@ -834,8 +832,8 @@ a {
 }
 
 .nav-toggle img {
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   display: block;
 }
 
@@ -872,6 +870,40 @@ a {
   to {
     transform: scale(1.06);
   }
+}
+
+/* ---- Lade-Screen beim Seitenwechsel (vervou-Logo) ---- */
+.route-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  animation: fade-in 0.25s ease;
+}
+
+.route-loading img {
+  width: 120px;
+  height: 120px;
+  border-radius: 28px;
+  border: 1px solid rgba(236, 231, 214, 0.14);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.5);
+  animation: splash-pulse 1.2s ease-in-out infinite alternate;
+}
+
+/* Sanftes Einblenden des Seiteninhalts nach dem Laden */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.hero,
+.welcome-panel {
+  animation: page-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* ============================================================
