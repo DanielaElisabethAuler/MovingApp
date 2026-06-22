@@ -1,11 +1,11 @@
 {
-  "name": "Felicurv",
-  "short_name": "Felicurv",
-  "description": "Der Boden wird winzig und unkaputtbar, die Decke bleibt offen.",
+  "name": "vervou",
+  "short_name": "vervou",
+  "description": "For the days you usually quit.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f0efeb",
-  "theme_color": "#f0efeb",
+  "background_color": "#ece7d6",
+  "theme_color": "#ece7d6",
   "icons": [
     {
       "src": "/icon-192.png",

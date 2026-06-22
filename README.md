@@ -1,4 +1,6 @@
-# Felicurv — Phase 1 (MVP)
+# vervou — Phase 1 (MVP)
+
+> For the days you usually quit.
 
 > Der Boden wird winzig und unkaputtbar, die Decke bleibt offen.
 > Ziel ist **Konsistenz**, nicht Stundenzahl.

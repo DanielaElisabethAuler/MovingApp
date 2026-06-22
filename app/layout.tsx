@@ -1,17 +1,17 @@
 import type { Metadata, Viewport } from "next";
-import { Poppins } from "next/font/google";
+import { Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 
-const poppins = Poppins({
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-poppins",
+  variable: "--font-bricolage",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Felicurv",
-  description: "Der Boden wird winzig und unkaputtbar, die Decke bleibt offen.",
+  title: "vervou",
+  description: "For the days you usually quit.",
   manifest: "/manifest.json",
   icons: {
     icon: "/icon-192.png",
@@ -20,12 +20,12 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true, // iOS: als Standalone-App starten
     statusBarStyle: "black-translucent",
-    title: "Felicurv",
+    title: "vervou",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f0efeb",
+  themeColor: "#ece7d6",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -37,8 +37,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de" className={poppins.variable}>
-      <body className={poppins.className}>
+    <html lang="de" className={bricolage.variable}>
+      <body className={bricolage.className}>
         <div className="wrap">{children}</div>
         {/* PWA: Service Worker registrieren (Installierbarkeit, Phase 1). */}
         <script

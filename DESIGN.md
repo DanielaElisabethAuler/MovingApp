@@ -1,4 +1,4 @@
-# Felicurv — Design-Handover (Wireframes → App)
+# vervou — Design-Handover (Wireframes → App)
 
 So gibst du mir deine Figma-Designs, damit ich sie möglichst **genauso** baue.
 Reihenfolge: du füllst die **Tokens** (einmal global) aus und exportierst pro
@@ -84,7 +84,7 @@ der Slider (echtes Befinden).
 - Streak zählt sichtbar **+1** hoch.
 - Wenn echtes Befinden > Vorhersage: „**Besser als gedacht 💥**" (der eigentliche
   Dopamin-Kick).
-- **Teilen** via Web-Share (Handy-Teilen-Dialog: Text „Tag 5 🔥 mit Felicurv" +
+- **Teilen** via Web-Share (Handy-Teilen-Dialog: Text „Tag 5 🔥 mit vervou" +
   Link). Optional später: teilbares Bild.
 - No-Show-Fall bekommt **keine** Celebration — sanftes „alles gut, morgen weiter"
   (Streak bleibt, never miss twice).

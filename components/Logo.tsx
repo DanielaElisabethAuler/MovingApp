@@ -4,7 +4,7 @@
 export function Logo({ size = 40 }: { size?: number }) {
   return (
     <span className="logo-badge" style={{ width: size, height: size }}>
-      <img src="/logo.svg" alt="Felicurv" width={size} height={size} />
+      <img src="/logo.svg" alt="vervou" width={size} height={size} />
     </span>
   );
 }

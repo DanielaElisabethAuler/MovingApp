@@ -46,8 +46,9 @@ export function AuthForm() {
       <div className="logo-hero">
         <Logo size={72} />
       </div>
-      <span className="eyebrow">Willkommen bei Felicurv</span>
+      <span className="eyebrow">vervou</span>
       <h1>{mode === "signin" ? "Einloggen" : "Account erstellen"}</h1>
+      <p className="tagline">For the days you usually quit.</p>
       <form onSubmit={submit}>
         <label>E-Mail</label>
         <input
